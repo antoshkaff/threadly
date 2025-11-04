@@ -27,22 +27,7 @@ export default function RootLayout({
             <body
                 className={`${plus_Jakarta_Sans.variable} ${plus_Jakarta_Sans.variable} ${plus_Jakarta_Sans.className} antialiased transition-colors duration-200`}
             >
-                <Providers>
-                    <main className="min-h-screen grid grid-cols-[310px_1fr] max-xl:grid-cols-[200px_1fr] max-lg:grid-cols-1">
-                        <Sidebar
-                            className={
-                                'row-span-full col-start-1 max-lg:hidden'
-                            }
-                        />
-                        <section
-                            className={
-                                'col-start-2 transition-colors duration-200'
-                            }
-                        >
-                            {children}
-                        </section>
-                    </main>
-                </Providers>
+                <Providers>{children}</Providers>
             </body>
         </html>
     );

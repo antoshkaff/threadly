@@ -6,12 +6,15 @@ import { Plus } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import SideBarMobile from '@/widgets/side-bar/ui/SideBarMobile';
 import Logo from '@/shared/ui/logo';
+import { getServerUser } from '@shared/getServerUser';
 
 type Props = {
     className?: string;
 };
 
-const HomeHeader = ({ className }: Props) => {
+const HomeHeader = async ({ className }: Props) => {
+    const user = await getServerUser();
+
     return (
         <header
             className={cn(
@@ -31,14 +34,16 @@ const HomeHeader = ({ className }: Props) => {
                         className={'w-full md:max-w-[400px]'}
                         inputClassName="h-12"
                     />
-                    <Button
-                        size={'lg'}
-                        className={
-                            'inline-flex gap-3 h-12 rounded-3xl font-bold text-white'
-                        }
-                    >
-                        Add new Post <Plus className="size-5" />
-                    </Button>
+                    {!!user && (
+                        <Button
+                            size={'lg'}
+                            className={
+                                'inline-flex gap-3 h-12 rounded-3xl font-bold text-white'
+                            }
+                        >
+                            Add new Post <Plus className="size-5" />
+                        </Button>
+                    )}
                 </div>
             </div>
 
