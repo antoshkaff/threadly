@@ -6,7 +6,7 @@ import { Input } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { ROUTES } from '@/shared/config/routes.config';
-import { useLoginMutation } from '@/features/login-form/api/hooks';
+import { useLoginMutation } from '@/features/auth/api/hooks';
 import { useFormik } from 'formik';
 import { zodValidate } from '@/shared/lib/utils/zodValidate';
 import { LoginInput } from '@shared/contracts/user.dto';
@@ -53,7 +53,7 @@ const LoginForm = () => {
     return (
         <AnimatePresence>
             <form
-                className="max-w-1/4 w-full bg-[var(--background-second)] px-6 py-9 rounded-3xl border border-[--border]"
+                className="max-w-1/4 max-xl:max-w-1/2 max-sm:max-w-full min-w-[300px] w-full bg-[var(--background-second)] px-6 py-9 rounded-3xl border border-[--border]"
                 onSubmit={form.handleSubmit}
             >
                 <FieldGroup>

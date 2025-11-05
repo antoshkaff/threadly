@@ -10,7 +10,6 @@ const Navigation = () => {
     const pathname = usePathname();
     const user = useUser((s) => s.user);
 
-    console.log('user', user);
     return (
         <nav>
             <ul className="flex flex-col gap-2">

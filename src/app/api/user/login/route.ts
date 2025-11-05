@@ -2,14 +2,14 @@ import { NextResponse } from 'next/server';
 import { AppError } from '@server/modules/error/AppError';
 import { UserService } from '@server/modules/user/user.service';
 import { LoginInput } from '@shared/contracts/user.dto';
-import { ACCESS_COOKIE, ACCESS_MAX_AGE } from '@shared/constants';
+import { ACCESS_COOKIE, ACCESS_MAX_AGE, ERROR_CODES } from '@shared/constants';
 
 export async function POST(req: Request) {
     const json = await req.json().catch(() => null);
     const parsed = LoginInput.safeParse(json);
     if (!parsed.success) {
         return NextResponse.json(
-            { code: 'validation', details: parsed.error.format() },
+            { code: ERROR_CODES.validation, details: parsed.error.format() },
             { status: 400 },
         );
     }

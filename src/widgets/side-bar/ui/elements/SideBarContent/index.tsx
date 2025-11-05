@@ -7,7 +7,7 @@ import { Button } from '@/shared/ui/button';
 import { getServerUser } from '@shared/getServerUser';
 import Link from 'next/link';
 import { ROUTES } from '@/shared/config/routes.config';
-import { LogOutButton } from '@/features/logout';
+import { LogOutButton } from '@/features/auth';
 
 type Props = {
     className?: string;

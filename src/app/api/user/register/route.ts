@@ -2,14 +2,14 @@ import { RegisterInput } from '@shared/contracts/user.dto';
 import { NextResponse } from 'next/server';
 import { UserService } from '@server/modules/user/user.service';
 import { AppError } from '@server/modules/error/AppError';
-import { ACCESS_COOKIE, ACCESS_MAX_AGE } from '@shared/constants';
+import { ACCESS_COOKIE, ACCESS_MAX_AGE, ERROR_CODES } from '@shared/constants';
 
 export async function POST(req: Request) {
     const json = await req.json().catch(() => null);
     const parsed = RegisterInput.safeParse(json);
     if (!parsed.success) {
         return NextResponse.json(
-            { error: 'validation', details: parsed.error.format() },
+            { code: ERROR_CODES.validation, details: parsed.error.format() },
             { status: 400 },
         );
     }
@@ -34,12 +34,12 @@ export async function POST(req: Request) {
     } catch (e: unknown) {
         if (e instanceof AppError) {
             return NextResponse.json(
-                { error: e.code, message: e.message },
+                { code: e.code, message: e.message },
                 { status: e.status },
             );
         }
         return NextResponse.json(
-            { error: 'internal', message: 'Server error' },
+            { code: ERROR_CODES.internal, message: 'Server error' },
             { status: 500 },
         );
     }

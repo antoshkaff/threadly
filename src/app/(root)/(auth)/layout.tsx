@@ -6,11 +6,11 @@ import { ROUTES } from '@/shared/config/routes.config';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
     return (
-        <main className="min-h-screen flex justify-center items-center relative">
+        <main className="min-h-screen flex justify-center items-center relative px-12 py-12">
             <Button
                 variant={'ghost'}
                 size={'icon-lg'}
-                className="absolute top-3 left-4"
+                className="fixed top-3 left-4"
                 asChild
             >
                 <Link href={ROUTES.HOME}>

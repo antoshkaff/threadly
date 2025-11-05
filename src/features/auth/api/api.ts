@@ -8,3 +8,19 @@ export const login = (data: { emailOrUsername: string; password: string }) => {
         body: JSON.stringify(data),
     });
 };
+
+export const register = (data: {
+    username: string;
+    email: string;
+    bio: string;
+    password: string;
+}) => {
+    return baseFetch<{ user: PublicUser; accessToken: string }>(API.SIGN_UP, {
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
+};
+
+export const logout = async () => {
+    return baseFetch(API.LOGOUT);
+};

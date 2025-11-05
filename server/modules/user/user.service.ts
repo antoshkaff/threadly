@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import { toPublicDTO, UserDAO } from './user.dao';
 import { signAccess } from '@shared/jwt';
 import { AppError } from '@server/modules/error/AppError';
+import { ERROR_CODES } from '@shared/constants';
 
 export class UserService {
     static async register(input: {
@@ -12,11 +13,15 @@ export class UserService {
         bio?: string;
     }) {
         if (await UserDAO.findByEmail(input.email)) {
-            throw new AppError('email_taken', 'Email already in use', 409);
+            throw new AppError(
+                ERROR_CODES.email_taken,
+                'Email already in use',
+                409,
+            );
         }
         if (await UserDAO.findByUsername(input.username)) {
             throw new AppError(
-                'username_taken',
+                ERROR_CODES.username_taken,
                 'Username already in use',
                 409,
             );
@@ -41,13 +46,13 @@ export class UserService {
         const user =
             byEmail ?? (await UserDAO.findByUsername(input.emailOrUsername));
         if (!user) {
-            throw new AppError('not_found', 'User not found', 404);
+            throw new AppError(ERROR_CODES.not_found, 'User not found', 404);
         }
 
         const ok = await bcrypt.compare(input.password, user.passwordHash);
         if (!ok) {
             throw new AppError(
-                'bad_credentials',
+                ERROR_CODES.bad_credentials,
                 'Wrong email or password',
                 401,
             );
@@ -58,7 +63,7 @@ export class UserService {
             email: user.email,
             username: user.username,
         };
-        const accessToken = await signAccess(payload, '30m');
+        const accessToken = await signAccess(payload, '7d');
 
         return { user: toPublicDTO(user), accessToken };
     }

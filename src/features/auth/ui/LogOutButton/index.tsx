@@ -3,8 +3,8 @@
 import React from 'react';
 import { LogOut } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
-import { useLogoutMutation } from '@/features/logout/api/hooks';
 import { Spinner } from '@/shared/ui/spinner';
+import { useLogoutMutation } from '@/features/auth/api/hooks';
 
 const LogOutButton = () => {
     const { mutate, isPending } = useLogoutMutation();
