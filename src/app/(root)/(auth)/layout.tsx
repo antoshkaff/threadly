@@ -3,6 +3,7 @@ import { Button } from '@/shared/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { ROUTES } from '@/shared/config/routes.config';
+import PageTransition from '@/shared/ui/PageTransition';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
     return (

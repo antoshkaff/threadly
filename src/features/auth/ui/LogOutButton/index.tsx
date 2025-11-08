@@ -4,7 +4,7 @@ import React from 'react';
 import { LogOut } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { Spinner } from '@/shared/ui/spinner';
-import { useLogoutMutation } from '@/features/auth/api/hooks';
+import { useLogoutMutation } from '@/entities/user/api/hooks';
 
 const LogOutButton = () => {
     const { mutate, isPending } = useLogoutMutation();

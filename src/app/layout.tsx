@@ -3,6 +3,8 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import Providers from '@/app/providers/Providers';
 import { Sidebar } from '@/widgets/side-bar';
+import { Toaster } from '@/shared/ui/sonner';
+import { API } from '@/shared/constants/api';
 
 const plus_Jakarta_Sans = Plus_Jakarta_Sans({
     variable: '--font-plus-jakarta-sans',
@@ -25,9 +27,18 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body
-                className={`${plus_Jakarta_Sans.variable} ${plus_Jakarta_Sans.variable} ${plus_Jakarta_Sans.className} antialiased transition-colors duration-200`}
+                className={`${plus_Jakarta_Sans.variable} ${plus_Jakarta_Sans.className} antialiased transition-colors duration-200`}
             >
-                <Providers>{children}</Providers>
+                <Providers>
+                    {children}
+                    <Toaster
+                        toastOptions={{
+                            classNames: {
+                                error: '!border !border-red-300 !bg-red-300 !text-red-900',
+                            },
+                        }}
+                    />
+                </Providers>
             </body>
         </html>
     );

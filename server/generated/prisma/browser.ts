@@ -21,3 +21,23 @@ export * from './enums';
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model Post
+ * 
+ */
+export type Post = Prisma.PostModel
+/**
+ * Model PostLike
+ * 
+ */
+export type PostLike = Prisma.PostLikeModel
+/**
+ * Model PostShare
+ * 
+ */
+export type PostShare = Prisma.PostShareModel
+/**
+ * Model Comment
+ * 
+ */
+export type Comment = Prisma.CommentModel
