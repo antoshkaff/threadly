@@ -15,24 +15,31 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(cuid())
-  username String  @unique
-  email    String  @unique
-  name     String
-  bio      String? @db.Text
+  id        String  @id @default(cuid())
+  username  String  @unique
+  email     String  @unique
+  name      String
+  bio       String? @db.Text
+  avatarUrl String
 
   passwordHash String
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  Post         Post[]
-  PostLike     PostLike[]
-  PostShare    PostShare[]
-  Comment      Comment[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  Post      Post[]
+  PostLike  PostLike[]
+  PostShare PostShare[]
+  Comment   Comment[]
 }
 
 model Post {
-  id            String   @id @default(cuid())
-  authorId      String
+  id       String @id @default(cuid())
+  authorId String
+
+  authorName      String
+  authorUsername  String
+  authorAvatarUrl String
+
   content       String   @db.Text
   images        String[]
   likesCount    Int      @default(0)

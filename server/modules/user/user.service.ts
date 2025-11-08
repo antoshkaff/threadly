@@ -10,6 +10,7 @@ export class UserService {
         email: string;
         name: string;
         password: string;
+        passwordRepeat: string;
         bio?: string;
     }) {
         if (await UserDAO.findByEmail(input.email)) {
@@ -27,7 +28,7 @@ export class UserService {
             );
         }
 
-        const { password, ...rest } = input;
+        const { password, passwordRepeat, ...rest } = input;
         const passwordHash = await bcrypt.hash(input.password, 10);
         const user = await UserDAO.create({ ...rest, passwordHash });
 

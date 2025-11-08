@@ -3,12 +3,22 @@ import { PublicPost } from '@shared/types/post';
 import { PublicComment } from '@shared/types/comment';
 
 export const PostDAO = {
-    create(data: { authorId: string; content: string; images: string[] }) {
+    create(data: {
+        authorId: string;
+        content: string;
+        images: string[];
+        authorName: string;
+        authorUsername: string;
+        authorAvatarUrl: string;
+    }) {
         return prisma.post.create({
             data: {
                 authorId: data.authorId,
                 content: data.content,
                 images: data.images,
+                authorName: data.authorName,
+                authorUsername: data.authorUsername,
+                authorAvatarUrl: data.authorAvatarUrl,
             },
         });
     },
@@ -96,6 +106,10 @@ export function toPublicPost(p: any): PublicPost {
         commentsCount: p.commentsCount,
         createdAt: p.createdAt.toISOString(),
         updatedAt: p.updatedAt.toISOString(),
+        isLiked: p.isLiked,
+        authorName: p.authorName,
+        authorUsername: p.authorUsername,
+        authorAvatarUrl: p.authorAvatarUrl,
     };
 }
 

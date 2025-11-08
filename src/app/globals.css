@@ -79,6 +79,7 @@
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
     --skeleton: oklch(0.922 0 0);
+    --header-home-height: 88px;
 }
 
 .dark {
@@ -142,4 +143,16 @@
     clip-path: inset(100%) !important;
     clip: rect(0 0 0 0) !important;
     overflow: hidden !important;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --header-home-height: 200px;
+    }
+}
+
+@media (max-width: 640px) {
+    :root {
+        --header-home-height: 170px;
+    }
 }

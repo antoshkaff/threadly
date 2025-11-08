@@ -7,19 +7,31 @@ import {
 } from '@shared/contracts/post.dto';
 import { PublicPost } from '@shared/types/post';
 import { ERROR_CODES } from '@shared/constants';
+import { UserDAO } from '@server/modules/user/user.dao';
 
 export const PostService = {
     async create(authorId: string, input: CreatePostInput) {
+        const user = await UserDAO.findById(authorId);
+
+        if (!user) {
+            throw new AppError(ERROR_CODES.not_found, 'User not found', 404);
+        }
+
         const post = await PostDAO.create({
             authorId,
             content: input.content,
             images: input.images ?? [],
+            authorName: user.name,
+            authorUsername: user.username,
+            authorAvatarUrl: user.avatarUrl,
         });
+
         return toPublicPost(post);
     },
 
     async toggleLike(userId: string, postId: string) {
         const post = await PostDAO.findById(postId);
+
         if (!post)
             throw new AppError(ERROR_CODES.not_found, 'Post not found', 404);
 
@@ -30,18 +42,27 @@ export const PostService = {
                 PostDAO.addLike(postId, userId),
                 PostDAO.incLikes(postId, 1),
             ]);
-            return { liked: true };
         } else {
             await prisma.$transaction([
                 PostDAO.removeLike(postId, userId),
                 PostDAO.incLikes(postId, -1),
             ]);
-            return { liked: false };
         }
+
+        const publicPost = toPublicPost(post);
+
+        return {
+            ...publicPost,
+            likesCount: has
+                ? publicPost.likesCount - 1
+                : publicPost.likesCount + 1,
+            isLiked: !has,
+        };
     },
 
     async share(userId: string, postId: string) {
         const post = await PostDAO.findById(postId);
+
         if (!post)
             throw new AppError(ERROR_CODES.not_found, 'Post not found', 404);
 
@@ -50,7 +71,12 @@ export const PostService = {
             PostDAO.incShares(postId, 1),
         ]);
 
-        return { ok: true };
+        const publicPost = toPublicPost(post);
+
+        return {
+            ...publicPost,
+            sharesCount: publicPost.sharesCount + 1,
+        };
     },
 
     async comment(userId: string, input: CreateCommentInput) {
@@ -88,25 +114,26 @@ export const PostService = {
         const hasMore = rows.length > limit;
         const slice = hasMore ? rows.slice(0, -1) : rows;
 
-        const items: (PublicPost & { liked?: boolean })[] =
-            slice.map(toPublicPost);
+        const baseItems = slice.map(toPublicPost);
 
-        if (params.viewerId && items.length) {
+        let likedSet: Set<string> | null = null;
+
+        if (params.viewerId && baseItems.length) {
             const likes = await prisma.postLike.findMany({
                 where: {
                     userId: params.viewerId,
-                    postId: { in: items.map((p) => p.id) },
+                    postId: { in: baseItems.map((p) => p.id) },
                 },
                 select: { postId: true },
             });
 
-            const likedSet = new Set(likes.map((l) => l.postId));
-            for (const post of items) {
-                if (likedSet.has(post.id)) {
-                    post.liked = true;
-                }
-            }
+            likedSet = new Set(likes.map((l) => l.postId));
         }
+
+        const items: PublicPost[] = baseItems.map((post) => ({
+            ...post,
+            isLiked: likedSet ? likedSet.has(post.id) : false,
+        }));
 
         return {
             items,

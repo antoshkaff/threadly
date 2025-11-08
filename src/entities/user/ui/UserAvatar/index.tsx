@@ -20,15 +20,14 @@ const userAvatarVariants = cva(
 
 export type Props = {
     className?: string;
+    link: string;
 } & VariantProps<typeof userAvatarVariants>;
 
-const UserAvatar = ({ className, size }: Props) => {
+const UserAvatar = ({ className, link, size }: Props) => {
     return (
         <div className={cn(userAvatarVariants({ size }))}>
             <Image
-                src={
-                    'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg?semt=ais_hybrid&w=740&q=80'
-                }
+                src={link}
                 height={48}
                 width={48}
                 alt={'Profile picture'}

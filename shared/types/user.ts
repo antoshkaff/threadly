@@ -3,7 +3,8 @@ export type PublicUser = {
     username: string;
     email: string;
     name: string;
-    bio: string;
+    bio: string | null;
     createdAt: string;
     updatedAt: string;
+    avatarUrl: string;
 };

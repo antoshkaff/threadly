@@ -17,7 +17,7 @@ const HomeHeader = async ({ className }: Props) => {
     return (
         <header
             className={cn(
-                'flex justify-between bg-[var(--background-second)] h-[88px] max-md:h-[200px] max-sm:h-[170px] border border-[--border] border-l-0 transition-colors duration-200',
+                'flex justify-between bg-[var(--background-second)] h-[var(--header-home-height)] border border-[--border] border-l-0 transition-colors duration-200 sticky w-full top-0 z-50',
                 className,
             )}
         >

@@ -1,13 +1,6 @@
-import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { POST_KEYS } from '@/entities/post/api/keys';
-import { createPost, getPostsInfinity } from '@/entities/post/api/api';
-
-export const useCreatePostMutation = () => {
-    return useMutation({
-        mutationKey: POST_KEYS.create,
-        mutationFn: createPost,
-    });
-};
+import { getPostsInfinity } from '@/entities/post/api/api';
 
 export const useInfinityPosts = () => {
     return useInfiniteQuery({

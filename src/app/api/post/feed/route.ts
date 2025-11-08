@@ -2,7 +2,8 @@ import { AppError } from '@server/modules/error/AppError';
 import { NextResponse } from 'next/server';
 import { PostService } from '@server/modules/post/post.service';
 import { cookies } from 'next/headers';
-import { ACCESS_COOKIE } from '@shared/constants';
+import { ACCESS_COOKIE, ERROR_CODES } from '@shared/constants';
+import { verifyAccess } from '@shared/jwt';
 
 export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
@@ -12,10 +13,20 @@ export async function GET(req: Request) {
 
     try {
         const jar = await cookies();
-        const viewerId = jar.get(ACCESS_COOKIE)?.value;
+        const token = jar.get(ACCESS_COOKIE)?.value;
+
+        if (!token) {
+            throw new AppError(ERROR_CODES.unauthorized, 'Unauthorized', 401);
+        }
+
+        const { sub } = await verifyAccess(token);
+
+        if (!sub) {
+            throw new AppError(ERROR_CODES.unauthorized, 'Unauthorized', 401);
+        }
 
         const data = await PostService.feed({
-            viewerId,
+            viewerId: sub,
             cursor,
             limit,
         });

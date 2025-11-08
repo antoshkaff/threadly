@@ -77,6 +77,7 @@ export const UserScalarFieldEnum = {
   email: 'email',
   name: 'name',
   bio: 'bio',
+  avatarUrl: 'avatarUrl',
   passwordHash: 'passwordHash',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -88,6 +89,9 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const PostScalarFieldEnum = {
   id: 'id',
   authorId: 'authorId',
+  authorName: 'authorName',
+  authorUsername: 'authorUsername',
+  authorAvatarUrl: 'authorAvatarUrl',
   content: 'content',
   images: 'images',
   likesCount: 'likesCount',

@@ -23,7 +23,7 @@ const SideBarContent = async ({ className }: Props) => {
             <Navigation />
             {!!user ? (
                 <div className="flex justify-between gap-3 mt-auto">
-                    <UserCardInline />
+                    <UserCardInline user={user} />
                     <LogOutButton />
                 </div>
             ) : (

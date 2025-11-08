@@ -18,7 +18,9 @@ export class UserDAO {
         bio?: string | null;
         passwordHash: string;
     }) {
-        return prisma.user.create({ data });
+        return prisma.user.create({
+            data: { ...data, avatarUrl: process.env.DEFAULT_AVATAR_URL! },
+        });
     }
 }
 
@@ -31,5 +33,6 @@ export function toPublicDTO(u: User) {
         bio: u.bio,
         createdAt: u.createdAt.toISOString(),
         updatedAt: u.updatedAt.toISOString(),
+        avatarUrl: u.avatarUrl,
     };
 }

@@ -12,6 +12,7 @@ export const getServerUser = cache(async () => {
 
     try {
         const payload = await verifyAccess<{ sub: string }>(token);
+        if (!payload.sub) return null;
         const user = await UserDAO.findById(payload.sub);
         return user ? toPublicDTO(user) : null;
     } catch {

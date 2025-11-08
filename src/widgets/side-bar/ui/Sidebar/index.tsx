@@ -10,7 +10,7 @@ const SideBar = ({ className }: Props) => {
     return (
         <aside
             className={cn(
-                ' bg-[var(--background-second)] py-8 px-4 border border-r-[--border] transition-colors duration-200',
+                ' bg-[var(--background-second)] py-8 px-4 border border-r-[--border] transition-colors duration-200 sticky top-0 h-screen',
                 className,
             )}
         >

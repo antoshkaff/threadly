@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { RefObject, useEffect, useRef } from 'react';
 import { useInfinityPosts } from '@/entities/post';
 import { PostCard } from '@/widgets/post';
 import { useUser } from '@/entities/user/model/store';
@@ -16,13 +16,19 @@ const PostInfinityList = () => {
         isLoading,
         isError,
     } = useInfinityPosts();
-    const intersectionRef = useRef(null);
 
-    const intersection = useIntersection(intersectionRef, {
-        root: null,
-        rootMargin: '300px',
-        threshold: 0,
-    });
+    const items = data?.pages.flatMap((page) => page.items);
+    const user = useUser((state) => state.user);
+
+    const intersectionRef = useRef<HTMLDivElement | null>(null);
+    const intersection = useIntersection(
+        intersectionRef as RefObject<HTMLElement>,
+        {
+            root: null,
+            rootMargin: '300px',
+            threshold: 0,
+        },
+    );
 
     useEffect(() => {
         if (!intersection) return;
@@ -34,9 +40,6 @@ const PostInfinityList = () => {
         fetchNextPage();
     }, [intersection]);
 
-    const items = data?.pages.flatMap((page) => page.items);
-    const user = useUser((state) => state.user);
-
     return (
         <div className="flex flex-col gap-4">
             <ul className="flex flex-col gap-4">
@@ -46,7 +49,7 @@ const PostInfinityList = () => {
                     </li>
                 ))}
             </ul>
-            <div ref={intersectionRef}></div>
+            <div ref={intersectionRef} />
             {(isFetchingNextPage || isLoading) && (
                 <ul className="flex flex-col gap-4">
                     {Array.from({ length: 3 }).map((_, i) => (

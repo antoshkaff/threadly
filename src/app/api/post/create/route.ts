@@ -1,7 +1,7 @@
 import { CreatePostInput } from '@shared/contracts/post.dto';
 import { NextResponse } from 'next/server';
 import { PostService } from '@server/modules/post/post.service';
-import { requireUserId } from '@shared/types/requireUserId';
+import { requireUserId } from '@shared/requireUserId';
 import { AppError } from '@server/modules/error/AppError';
 import { ERROR_CODES } from '@shared/constants';
 
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     try {
         const userId = await requireUserId();
 
-        const post = await PostService.create(userId, parsed.data);
+        const post = await PostService.create(userId!, parsed.data);
         return NextResponse.json({ post }, { status: 201 });
     } catch (e) {
         if (e instanceof AppError) {

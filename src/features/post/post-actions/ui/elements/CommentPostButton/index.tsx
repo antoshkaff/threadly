@@ -3,10 +3,10 @@ import { Button } from '@/shared/ui/button';
 import { MessageSquare } from 'lucide-react';
 
 type Props = {
+    postId: string;
     amount: number;
 };
-
-const CommentPostButton = ({ amount }: Props) => {
+const CommentPostButton = ({ amount, postId }: Props) => {
     return (
         <Button variant={'ghost'}>
             <MessageSquare className="size-5" />

@@ -8,5 +8,8 @@ export type PublicPost = {
     commentsCount: number;
     createdAt: string;
     updatedAt: string;
-    liked?: boolean;
+    isLiked: boolean;
+    authorName: string;
+    authorUsername: string;
+    authorAvatarUrl: string;
 };

@@ -27,14 +27,16 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body
-                className={`${plus_Jakarta_Sans.variable} ${plus_Jakarta_Sans.className} antialiased transition-colors duration-200`}
+                className={`${plus_Jakarta_Sans.variable} ${plus_Jakarta_Sans.className} antialiased transition-colors duration-200 `}
             >
                 <Providers>
                     {children}
                     <Toaster
                         toastOptions={{
                             classNames: {
-                                error: '!border !border-red-300 !bg-red-300 !text-red-900',
+                                error: '!border !border-red-200 !bg-red-200 !text-red-900',
+                                success:
+                                    '!border !border-green-200 !bg-green-200 !text-green-800',
                             },
                         }}
                     />

@@ -26,7 +26,7 @@ const HeaderActions = async ({ className }: Props) => {
         >
             {!!user ? (
                 <>
-                    <UserAvatar size={'lg'} />
+                    <UserAvatar size={'lg'} link={user.avatarUrl} />
                     <NotificationMenu />
                 </>
             ) : (

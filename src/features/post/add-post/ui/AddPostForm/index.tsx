@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
     Field,
@@ -13,14 +13,14 @@ import { useFormik } from 'formik';
 import { zodValidate } from '@/shared/lib/utils/zodValidate';
 import { CreatePostInput } from '@shared/contracts/post.dto';
 import { uploadImages } from '@/features/post/add-post/api/api';
-import { useCreatePostMutation } from '@/entities/post';
+import { useCreatePostMutation } from '@/features/post/add-post/api/hooks';
 import { toast } from 'sonner';
 
 const MAX_IMAGES = 10;
 const MAX_SIZE_MB = 10;
 export const FORM_ID = 'add-post-form';
 
-const AddPostForm = ({ submitButtonRef }) => {
+const AddPostForm = () => {
     const { mutateAsync, isPending } = useCreatePostMutation();
     const [files, setFiles] = useState<File[]>([]);
 
@@ -46,20 +46,21 @@ const AddPostForm = ({ submitButtonRef }) => {
         onSubmit: async (values, helpers) => {
             try {
                 const op = (async () => {
-                    const { urls } =
-                        !!files.length && (await uploadImages(files));
+                    const res = files.length
+                        ? await uploadImages(files)
+                        : { urls: [] };
+                    const { urls } = res;
+
                     const payload = { content: values.content, images: urls };
-                    await mutateAsync(payload); // должен кидать reject при ошибке
+                    await mutateAsync(payload);
                 })();
 
-                // важно: передаём сам promise, а не функцию
-                await toast.promise(op, {
+                toast.promise(op, {
                     loading: 'Loading...',
                     success: 'Post has been created!',
-                    error: 'Upload failed', // добавь error, иначе при reject тост будет "немой"
+                    error: 'Upload failed',
                 });
 
-                // чистим только ПОСЛЕ успешного выполнения
                 setFiles([]);
                 helpers.resetForm();
             } catch (e) {
