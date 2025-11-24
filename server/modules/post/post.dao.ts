@@ -1,126 +1,137 @@
+// server/modules/post/post.dao.ts
 import { prisma } from '@server/shared/prisma';
 import { PublicPost } from '@shared/types/post';
-import { PublicComment } from '@shared/types/comment';
+import { Post, User } from '@server/generated/prisma/client';
 
 export const PostDAO = {
-    create(data: {
-        authorId: string;
-        content: string;
-        images: string[];
-        authorName: string;
-        authorUsername: string;
-        authorAvatarUrl: string;
-    }) {
+    findById(id: string) {
+        return prisma.post.findUnique({
+            where: { id },
+            include: {
+                author: {
+                    select: {
+                        id: true,
+                        username: true,
+                        name: true,
+                        avatarUrl: true,
+                    },
+                },
+            },
+        });
+    },
+
+    create(data: { authorId: string; content: string; images: string[] }) {
         return prisma.post.create({
             data: {
                 authorId: data.authorId,
                 content: data.content,
                 images: data.images,
-                authorName: data.authorName,
-                authorUsername: data.authorUsername,
-                authorAvatarUrl: data.authorAvatarUrl,
+            },
+            include: {
+                author: {
+                    select: {
+                        id: true,
+                        username: true,
+                        name: true,
+                        avatarUrl: true,
+                    },
+                },
             },
         });
     },
 
-    findById(id: string) {
-        return prisma.post.findUnique({ where: { id } });
-    },
+    listFeed(params: { cursor?: string; limit: number; authorId?: string }) {
+        const { cursor, limit, authorId } = params;
 
-    listFeed(params: { cursor?: string; limit: number }) {
         return prisma.post.findMany({
-            take: params.limit + 1,
+            where: authorId ? { authorId } : undefined,
             orderBy: { createdAt: 'desc' },
-            cursor: params.cursor ? { id: params.cursor } : undefined,
-            skip: params.cursor ? 1 : 0,
+            take: limit + 1,
+            cursor: cursor ? { id: cursor } : undefined,
+            skip: cursor ? 1 : 0,
+            include: {
+                author: {
+                    select: {
+                        id: true,
+                        username: true,
+                        name: true,
+                        avatarUrl: true,
+                    },
+                },
+            },
         });
     },
 
     hasLike(postId: string, userId: string) {
         return prisma.postLike.findUnique({
-            where: { postId_userId: { postId, userId } },
-            select: { id: true },
-        });
-    },
-
-    addLike(postId: string, userId: string) {
-        return prisma.postLike.create({ data: { postId, userId } });
-    },
-
-    removeLike(postId: string, userId: string) {
-        return prisma.postLike.delete({
-            where: { postId_userId: { postId, userId } },
-        });
-    },
-
-    incLikes(postId: string, n: number) {
-        return prisma.post.update({
-            where: { id: postId },
-            data: { likesCount: { increment: n } },
-        });
-    },
-
-    createShare(postId: string, userId: string) {
-        return prisma.postShare.create({ data: { postId, userId } });
-    },
-
-    incShares(postId: string, n: number) {
-        return prisma.post.update({
-            where: { id: postId },
-            data: { sharesCount: { increment: n } },
-        });
-    },
-
-    createComment(data: {
-        postId: string;
-        authorId: string;
-        content: string;
-        parentId?: string;
-    }) {
-        return prisma.comment.create({
-            data: {
-                postId: data.postId,
-                authorId: data.authorId,
-                content: data.content,
-                parentId: data.parentId,
+            where: {
+                postId_userId: { postId, userId },
             },
         });
     },
 
-    incComments(postId: string, n: number) {
+    addLike(postId: string, userId: string) {
+        return prisma.postLike.create({
+            data: { postId, userId },
+        });
+    },
+
+    removeLike(postId: string, userId: string) {
+        return prisma.postLike.delete({
+            where: {
+                postId_userId: { postId, userId },
+            },
+        });
+    },
+
+    incLikes(postId: string, delta: number) {
         return prisma.post.update({
             where: { id: postId },
-            data: { commentsCount: { increment: n } },
+            data: { likesCount: { increment: delta } },
+        });
+    },
+
+    createShare(postId: string, userId: string) {
+        return prisma.postShare.create({
+            data: { postId, userId },
+        });
+    },
+
+    incShares(postId: string, delta: number) {
+        return prisma.post.update({
+            where: { id: postId },
+            data: { sharesCount: { increment: delta } },
+        });
+    },
+
+    delete(id: string) {
+        return prisma.post.delete({
+            where: { id },
         });
     },
 };
 
-export function toPublicPost(p: any): PublicPost {
-    return {
-        id: p.id,
-        authorId: p.authorId,
-        content: p.content,
-        images: p.images ?? [],
-        likesCount: p.likesCount,
-        sharesCount: p.sharesCount,
-        commentsCount: p.commentsCount,
-        createdAt: p.createdAt.toISOString(),
-        updatedAt: p.updatedAt.toISOString(),
-        isLiked: p.isLiked,
-        authorName: p.authorName,
-        authorUsername: p.authorUsername,
-        authorAvatarUrl: p.authorAvatarUrl,
-    };
-}
+type PostWithAuthor = Post & {
+    author: Pick<User, 'id' | 'username' | 'name' | 'avatarUrl'>;
+};
 
-export function toPublicComment(c: any): PublicComment {
-    return {
-        id: c.id,
-        postId: c.postId,
-        authorId: c.authorId,
-        content: c.content,
-        parentId: c.parentId ?? null,
-        createdAt: c.createdAt.toISOString(),
-        updatedAt: c.updatedAt.toISOString(),
-    };
-}
+export const toPublicPost = (
+    post: PostWithAuthor,
+    opts?: { isLiked?: boolean },
+): PublicPost => ({
+    id: post.id,
+    content: post.content,
+    images: post.images,
+    likesCount: post.likesCount,
+    sharesCount: post.sharesCount,
+    commentsCount: post.commentsCount,
+    createdAt: post.createdAt.toISOString(),
+    updatedAt: post.updatedAt.toISOString(),
+    author: {
+        id: post.author.id,
+        username: post.author.username,
+        name: post.author.name,
+        avatarUrl: post.author.avatarUrl,
+    },
+    isLiked: opts?.isLiked ?? false,
+});

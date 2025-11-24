@@ -5,6 +5,7 @@ import {
     Dialog,
     DialogClose,
     DialogContent,
+    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -28,6 +29,10 @@ const AddPost = () => {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Add new post</DialogTitle>
+                    <DialogDescription>
+                        Share your thoughts, photos or updates with your friends
+                        in one simple post.
+                    </DialogDescription>
                 </DialogHeader>
 
                 <AddPostForm />

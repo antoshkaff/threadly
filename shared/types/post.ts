@@ -1,6 +1,5 @@
 export type PublicPost = {
     id: string;
-    authorId: string;
     content: string;
     images: string[];
     likesCount: number;
@@ -8,8 +7,11 @@ export type PublicPost = {
     commentsCount: number;
     createdAt: string;
     updatedAt: string;
+    author: {
+        id: string;
+        username: string;
+        name: string;
+        avatarUrl: string;
+    };
     isLiked: boolean;
-    authorName: string;
-    authorUsername: string;
-    authorAvatarUrl: string;
 };

@@ -6,18 +6,23 @@ import { likePost, sharePost } from '@/features/post/post-actions/api/api';
 import { InfiniteData } from '@tanstack/query-core';
 import { PublicPost } from '@shared/types/post';
 
+type PostsPage = {
+    items: PublicPost[];
+    nextCursor?: string | null;
+};
+
 export const usePostLikeMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: POST_KEYS.like,
         mutationFn: likePost,
         onSuccess: (updated) => {
-            queryClient.setQueryData<
+            queryClient.setQueriesData<
                 InfiniteData<{
                     items: PublicPost[];
                     nextCursor?: string | null;
                 }>
-            >(POST_KEYS.postList, (old) => {
+            >({ queryKey: POST_KEYS.postList }, (old) => {
                 if (!old) return old;
                 return {
                     ...old,
@@ -33,6 +38,11 @@ export const usePostLikeMutation = () => {
                     })),
                 };
             });
+
+            queryClient.setQueryData<{ post: PublicPost }>(
+                POST_KEYS.post(updated.id),
+                () => ({ post: updated }),
+            );
         },
     });
 };
@@ -43,29 +53,27 @@ export const usePostShareMutation = () => {
     return useMutation({
         mutationKey: POST_KEYS.share,
         mutationFn: sharePost,
-        onSuccess: (updated) => {
-            queryClient.setQueryData<
-                InfiniteData<{
-                    items: PublicPost[];
-                    nextCursor?: string | null;
-                }>
-            >(POST_KEYS.postList, (old) => {
-                if (!old) return old;
-                return {
-                    ...old,
-                    pages: old.pages.map((page) => ({
-                        ...page,
-                        items: page.items.map((post) =>
-                            post.id === updated.id
-                                ? {
-                                      ...post,
-                                      sharesCount: post.sharesCount + 1,
-                                  }
-                                : post,
-                        ),
-                    })),
-                };
-            });
+        onSuccess: ({ post }, postId) => {
+            queryClient.setQueriesData<InfiniteData<PostsPage>>(
+                { queryKey: POST_KEYS.postList },
+                (old) => {
+                    if (!old) return old;
+                    return {
+                        ...old,
+                        pages: old.pages.map((page) => ({
+                            ...page,
+                            items: page.items.map((p) =>
+                                p.id === post.id ? post : p,
+                            ),
+                        })),
+                    };
+                },
+            );
+
+            queryClient.setQueryData<{ post: PublicPost }>(
+                POST_KEYS.post(post.id),
+                (old) => (old ? { ...old, post } : { post }),
+            );
         },
     });
 };

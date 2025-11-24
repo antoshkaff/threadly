@@ -11,24 +11,28 @@ export async function GET(req: Request) {
     const limitParam = searchParams.get('limit');
     const limit = limitParam ? Number(limitParam) : undefined;
 
+    const username = searchParams.get('username') ?? undefined; // вот фильтр
+
     try {
         const jar = await cookies();
         const token = jar.get(ACCESS_COOKIE)?.value;
 
-        if (!token) {
-            throw new AppError(ERROR_CODES.unauthorized, 'Unauthorized', 401);
-        }
+        let viewerId: string | undefined;
 
-        const { sub } = await verifyAccess(token);
-
-        if (!sub) {
-            throw new AppError(ERROR_CODES.unauthorized, 'Unauthorized', 401);
+        if (token) {
+            try {
+                const payload = await verifyAccess(token);
+                viewerId = payload.sub;
+            } catch {
+                viewerId = undefined;
+            }
         }
 
         const data = await PostService.feed({
-            viewerId: sub,
+            viewerId,
             cursor,
             limit,
+            username,
         });
 
         return NextResponse.json(data, { status: 200 });

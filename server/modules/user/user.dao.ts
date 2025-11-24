@@ -22,6 +22,83 @@ export class UserDAO {
             data: { ...data, avatarUrl: process.env.DEFAULT_AVATAR_URL! },
         });
     }
+    static async toggleFollow(followerId: string, followingId: string) {
+        const exists = await prisma.userFollow.findUnique({
+            where: { followerId_followingId: { followerId, followingId } },
+        });
+
+        if (exists) {
+            await prisma.userFollow.delete({
+                where: { followerId_followingId: { followerId, followingId } },
+            });
+            return { followed: false };
+        }
+
+        await prisma.userFollow.create({
+            data: { followerId, followingId },
+        });
+
+        return { followed: true };
+    }
+
+    static async getFollowers(userId: string) {
+        const followers = await prisma.userFollow.findMany({
+            where: { followingId: userId },
+            include: {
+                follower: {
+                    select: { name: true, username: true, avatarUrl: true },
+                },
+            },
+            orderBy: { createdAt: 'desc' },
+        });
+
+        return followers.map((f) => f.follower);
+    }
+
+    static getProfileByUsername(username: string) {
+        return prisma.user.findUnique({
+            where: { username },
+            select: {
+                id: true,
+                username: true,
+                name: true,
+                bio: true,
+                avatarUrl: true,
+                _count: {
+                    select: {
+                        subscriptions: true,
+                        subscribers: true,
+                    },
+                },
+                Post: {
+                    orderBy: { createdAt: 'desc' },
+                },
+            },
+        });
+    }
+
+    static isFollowing(followerId: string, followingId: string) {
+        return prisma.userFollow.findUnique({
+            where: {
+                followerId_followingId: { followerId, followingId },
+            },
+            select: { followerId: true },
+        });
+    }
+
+    static updateProfile(
+        userId: string,
+        data: {
+            name?: string;
+            bio?: string | null;
+            avatarUrl?: string;
+        },
+    ) {
+        return prisma.user.update({
+            where: { id: userId },
+            data,
+        });
+    }
 }
 
 export function toPublicDTO(u: User) {

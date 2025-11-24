@@ -1,39 +1,132 @@
-import { AppError } from '@server/modules/error/AppError';
 import { prisma } from '@server/shared/prisma';
-import { PostDAO, toPublicComment, toPublicPost } from './post.dao';
-import {
-    CreateCommentInput,
-    CreatePostInput,
-} from '@shared/contracts/post.dto';
-import { PublicPost } from '@shared/types/post';
+import { AppError } from '@server/modules/error/AppError';
 import { ERROR_CODES } from '@shared/constants';
+import { PostDAO } from './post.dao';
+import { toPublicPost } from './post.dao';
+import type { PublicPost } from '@shared/types/post';
+import type { CreatePostInput } from '@shared/contracts/post.dto';
 import { UserDAO } from '@server/modules/user/user.dao';
 
+type PublicPostWithMeta = PublicPost & { isLiked: boolean };
+
+const getPublicPostWithMeta = async (
+    postId: string,
+    viewerId?: string,
+): Promise<PublicPostWithMeta> => {
+    const post = await PostDAO.findById(postId);
+    if (!post) {
+        throw new AppError(ERROR_CODES.not_found, 'Post not found', 404);
+    }
+
+    const base = toPublicPost(post);
+
+    let isLiked = false;
+    if (viewerId) {
+        const like = await PostDAO.hasLike(postId, viewerId);
+        isLiked = !!like;
+    }
+
+    return {
+        ...base,
+        isLiked,
+    };
+};
+
 export const PostService = {
-    async create(authorId: string, input: CreatePostInput) {
-        const user = await UserDAO.findById(authorId);
-
-        if (!user) {
-            throw new AppError(ERROR_CODES.not_found, 'User not found', 404);
-        }
-
+    async create(
+        authorId: string,
+        input: CreatePostInput,
+    ): Promise<PublicPostWithMeta> {
         const post = await PostDAO.create({
             authorId,
             content: input.content,
             images: input.images ?? [],
-            authorName: user.name,
-            authorUsername: user.username,
-            authorAvatarUrl: user.avatarUrl,
         });
 
-        return toPublicPost(post);
+        const base = toPublicPost(post);
+
+        return {
+            ...base,
+            isLiked: false,
+        };
     },
 
-    async toggleLike(userId: string, postId: string) {
-        const post = await PostDAO.findById(postId);
+    async getById(
+        postId: string,
+        viewerId?: string,
+    ): Promise<PublicPostWithMeta> {
+        return getPublicPostWithMeta(postId, viewerId);
+    },
 
-        if (!post)
+    async feed(params: {
+        viewerId?: string;
+        cursor?: string;
+        limit?: number;
+        username?: string;
+    }): Promise<{ items: PublicPostWithMeta[]; nextCursor?: string }> {
+        const limit = Math.min(Math.max(params.limit ?? 20, 1), 50);
+
+        let authorId: string | undefined;
+
+        if (params.username) {
+            const user = await UserDAO.findByUsername(params.username);
+            if (!user) {
+                throw new AppError(
+                    ERROR_CODES.not_found,
+                    'User not found',
+                    404,
+                );
+            }
+            authorId = user.id;
+        }
+
+        const rows = await PostDAO.listFeed({
+            cursor: params.cursor,
+            limit,
+            authorId,
+        });
+
+        const hasMore = rows.length > limit;
+        const slice = hasMore ? rows.slice(0, -1) : rows;
+
+        const base = slice.map((post) => toPublicPost(post));
+
+        if (!params.viewerId || base.length === 0) {
+            return {
+                items: base.map((p) => ({ ...p, isLiked: false })),
+                nextCursor: hasMore ? slice[slice.length - 1].id : undefined,
+            };
+        }
+
+        const likes = await prisma.postLike.findMany({
+            where: {
+                userId: params.viewerId,
+                postId: { in: base.map((p) => p.id) },
+            },
+            select: { postId: true },
+        });
+
+        const likedSet = new Set(likes.map((l) => l.postId));
+
+        const items: PublicPostWithMeta[] = base.map((p) => ({
+            ...p,
+            isLiked: likedSet.has(p.id),
+        }));
+
+        return {
+            items,
+            nextCursor: hasMore ? slice[slice.length - 1].id : undefined,
+        };
+    },
+
+    async toggleLike(
+        userId: string,
+        postId: string,
+    ): Promise<PublicPostWithMeta> {
+        const post = await PostDAO.findById(postId);
+        if (!post) {
             throw new AppError(ERROR_CODES.not_found, 'Post not found', 404);
+        }
 
         const has = await PostDAO.hasLike(postId, userId);
 
@@ -49,95 +142,38 @@ export const PostService = {
             ]);
         }
 
-        const publicPost = toPublicPost(post);
-
-        return {
-            ...publicPost,
-            likesCount: has
-                ? publicPost.likesCount - 1
-                : publicPost.likesCount + 1,
-            isLiked: !has,
-        };
+        return getPublicPostWithMeta(postId, userId);
     },
 
-    async share(userId: string, postId: string) {
+    async share(userId: string, postId: string): Promise<PublicPostWithMeta> {
         const post = await PostDAO.findById(postId);
-
-        if (!post)
+        if (!post) {
             throw new AppError(ERROR_CODES.not_found, 'Post not found', 404);
+        }
 
         await prisma.$transaction([
             PostDAO.createShare(postId, userId),
             PostDAO.incShares(postId, 1),
         ]);
 
-        const publicPost = toPublicPost(post);
-
-        return {
-            ...publicPost,
-            sharesCount: publicPost.sharesCount + 1,
-        };
+        return getPublicPostWithMeta(postId, userId);
     },
 
-    async comment(userId: string, input: CreateCommentInput) {
-        const post = await PostDAO.findById(input.postId);
-        if (!post)
+    async delete(postId: string, userId: string): Promise<void> {
+        const post = await PostDAO.findById(postId);
+
+        if (!post) {
             throw new AppError(ERROR_CODES.not_found, 'Post not found', 404);
-
-        const c = await prisma.$transaction(async (tx) => {
-            const comment = await tx.comment.create({
-                data: {
-                    postId: input.postId,
-                    authorId: userId,
-                    content: input.content,
-                    parentId: input.parentId,
-                },
-            });
-            await tx.post.update({
-                where: { id: input.postId },
-                data: { commentsCount: { increment: 1 } },
-            });
-            return comment;
-        });
-
-        return toPublicComment(c);
-    },
-
-    async feed(params: {
-        viewerId?: string;
-        cursor?: string;
-        limit?: number;
-    }): Promise<{ items: PublicPost[]; nextCursor?: string }> {
-        const limit = Math.min(Math.max(params.limit ?? 20, 1), 50);
-        const rows = await PostDAO.listFeed({ cursor: params.cursor, limit });
-
-        const hasMore = rows.length > limit;
-        const slice = hasMore ? rows.slice(0, -1) : rows;
-
-        const baseItems = slice.map(toPublicPost);
-
-        let likedSet: Set<string> | null = null;
-
-        if (params.viewerId && baseItems.length) {
-            const likes = await prisma.postLike.findMany({
-                where: {
-                    userId: params.viewerId,
-                    postId: { in: baseItems.map((p) => p.id) },
-                },
-                select: { postId: true },
-            });
-
-            likedSet = new Set(likes.map((l) => l.postId));
         }
 
-        const items: PublicPost[] = baseItems.map((post) => ({
-            ...post,
-            isLiked: likedSet ? likedSet.has(post.id) : false,
-        }));
+        if (post.author.id !== userId) {
+            throw new AppError(
+                ERROR_CODES.forbidden,
+                'You are not allowed to delete this post',
+                403,
+            );
+        }
 
-        return {
-            items,
-            nextCursor: hasMore ? slice[slice.length - 1].id : undefined,
-        };
+        await PostDAO.delete(postId);
     },
 };

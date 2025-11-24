@@ -40,9 +40,6 @@ export type PostSumAggregateOutputType = {
 export type PostMinAggregateOutputType = {
   id: string | null
   authorId: string | null
-  authorName: string | null
-  authorUsername: string | null
-  authorAvatarUrl: string | null
   content: string | null
   likesCount: number | null
   sharesCount: number | null
@@ -54,9 +51,6 @@ export type PostMinAggregateOutputType = {
 export type PostMaxAggregateOutputType = {
   id: string | null
   authorId: string | null
-  authorName: string | null
-  authorUsername: string | null
-  authorAvatarUrl: string | null
   content: string | null
   likesCount: number | null
   sharesCount: number | null
@@ -68,9 +62,6 @@ export type PostMaxAggregateOutputType = {
 export type PostCountAggregateOutputType = {
   id: number
   authorId: number
-  authorName: number
-  authorUsername: number
-  authorAvatarUrl: number
   content: number
   images: number
   likesCount: number
@@ -97,9 +88,6 @@ export type PostSumAggregateInputType = {
 export type PostMinAggregateInputType = {
   id?: true
   authorId?: true
-  authorName?: true
-  authorUsername?: true
-  authorAvatarUrl?: true
   content?: true
   likesCount?: true
   sharesCount?: true
@@ -111,9 +99,6 @@ export type PostMinAggregateInputType = {
 export type PostMaxAggregateInputType = {
   id?: true
   authorId?: true
-  authorName?: true
-  authorUsername?: true
-  authorAvatarUrl?: true
   content?: true
   likesCount?: true
   sharesCount?: true
@@ -125,9 +110,6 @@ export type PostMaxAggregateInputType = {
 export type PostCountAggregateInputType = {
   id?: true
   authorId?: true
-  authorName?: true
-  authorUsername?: true
-  authorAvatarUrl?: true
   content?: true
   images?: true
   likesCount?: true
@@ -227,9 +209,6 @@ export type PostGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type PostGroupByOutputType = {
   id: string
   authorId: string
-  authorName: string
-  authorUsername: string
-  authorAvatarUrl: string
   content: string
   images: string[]
   likesCount: number
@@ -265,9 +244,6 @@ export type PostWhereInput = {
   NOT?: Prisma.PostWhereInput | Prisma.PostWhereInput[]
   id?: Prisma.StringFilter<"Post"> | string
   authorId?: Prisma.StringFilter<"Post"> | string
-  authorName?: Prisma.StringFilter<"Post"> | string
-  authorUsername?: Prisma.StringFilter<"Post"> | string
-  authorAvatarUrl?: Prisma.StringFilter<"Post"> | string
   content?: Prisma.StringFilter<"Post"> | string
   images?: Prisma.StringNullableListFilter<"Post">
   likesCount?: Prisma.IntFilter<"Post"> | number
@@ -284,9 +260,6 @@ export type PostWhereInput = {
 export type PostOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
-  authorName?: Prisma.SortOrder
-  authorUsername?: Prisma.SortOrder
-  authorAvatarUrl?: Prisma.SortOrder
   content?: Prisma.SortOrder
   images?: Prisma.SortOrder
   likesCount?: Prisma.SortOrder
@@ -306,9 +279,6 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.PostWhereInput[]
   NOT?: Prisma.PostWhereInput | Prisma.PostWhereInput[]
   authorId?: Prisma.StringFilter<"Post"> | string
-  authorName?: Prisma.StringFilter<"Post"> | string
-  authorUsername?: Prisma.StringFilter<"Post"> | string
-  authorAvatarUrl?: Prisma.StringFilter<"Post"> | string
   content?: Prisma.StringFilter<"Post"> | string
   images?: Prisma.StringNullableListFilter<"Post">
   likesCount?: Prisma.IntFilter<"Post"> | number
@@ -325,9 +295,6 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
 export type PostOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
-  authorName?: Prisma.SortOrder
-  authorUsername?: Prisma.SortOrder
-  authorAvatarUrl?: Prisma.SortOrder
   content?: Prisma.SortOrder
   images?: Prisma.SortOrder
   likesCount?: Prisma.SortOrder
@@ -348,9 +315,6 @@ export type PostScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PostScalarWhereWithAggregatesInput | Prisma.PostScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Post"> | string
   authorId?: Prisma.StringWithAggregatesFilter<"Post"> | string
-  authorName?: Prisma.StringWithAggregatesFilter<"Post"> | string
-  authorUsername?: Prisma.StringWithAggregatesFilter<"Post"> | string
-  authorAvatarUrl?: Prisma.StringWithAggregatesFilter<"Post"> | string
   content?: Prisma.StringWithAggregatesFilter<"Post"> | string
   images?: Prisma.StringNullableListFilter<"Post">
   likesCount?: Prisma.IntWithAggregatesFilter<"Post"> | number
@@ -362,9 +326,6 @@ export type PostScalarWhereWithAggregatesInput = {
 
 export type PostCreateInput = {
   id?: string
-  authorName: string
-  authorUsername: string
-  authorAvatarUrl: string
   content: string
   images?: Prisma.PostCreateimagesInput | string[]
   likesCount?: number
@@ -381,9 +342,6 @@ export type PostCreateInput = {
 export type PostUncheckedCreateInput = {
   id?: string
   authorId: string
-  authorName: string
-  authorUsername: string
-  authorAvatarUrl: string
   content: string
   images?: Prisma.PostCreateimagesInput | string[]
   likesCount?: number
@@ -398,9 +356,6 @@ export type PostUncheckedCreateInput = {
 
 export type PostUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  authorName?: Prisma.StringFieldUpdateOperationsInput | string
-  authorUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  authorAvatarUrl?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   images?: Prisma.PostUpdateimagesInput | string[]
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -417,9 +372,6 @@ export type PostUpdateInput = {
 export type PostUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
-  authorName?: Prisma.StringFieldUpdateOperationsInput | string
-  authorUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  authorAvatarUrl?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   images?: Prisma.PostUpdateimagesInput | string[]
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -435,9 +387,6 @@ export type PostUncheckedUpdateInput = {
 export type PostCreateManyInput = {
   id?: string
   authorId: string
-  authorName: string
-  authorUsername: string
-  authorAvatarUrl: string
   content: string
   images?: Prisma.PostCreateimagesInput | string[]
   likesCount?: number
@@ -449,9 +398,6 @@ export type PostCreateManyInput = {
 
 export type PostUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  authorName?: Prisma.StringFieldUpdateOperationsInput | string
-  authorUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  authorAvatarUrl?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   images?: Prisma.PostUpdateimagesInput | string[]
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -464,9 +410,6 @@ export type PostUpdateManyMutationInput = {
 export type PostUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
-  authorName?: Prisma.StringFieldUpdateOperationsInput | string
-  authorUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  authorAvatarUrl?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   images?: Prisma.PostUpdateimagesInput | string[]
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -497,9 +440,6 @@ export type StringNullableListFilter<$PrismaModel = never> = {
 export type PostCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
-  authorName?: Prisma.SortOrder
-  authorUsername?: Prisma.SortOrder
-  authorAvatarUrl?: Prisma.SortOrder
   content?: Prisma.SortOrder
   images?: Prisma.SortOrder
   likesCount?: Prisma.SortOrder
@@ -518,9 +458,6 @@ export type PostAvgOrderByAggregateInput = {
 export type PostMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
-  authorName?: Prisma.SortOrder
-  authorUsername?: Prisma.SortOrder
-  authorAvatarUrl?: Prisma.SortOrder
   content?: Prisma.SortOrder
   likesCount?: Prisma.SortOrder
   sharesCount?: Prisma.SortOrder
@@ -532,9 +469,6 @@ export type PostMaxOrderByAggregateInput = {
 export type PostMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
-  authorName?: Prisma.SortOrder
-  authorUsername?: Prisma.SortOrder
-  authorAvatarUrl?: Prisma.SortOrder
   content?: Prisma.SortOrder
   likesCount?: Prisma.SortOrder
   sharesCount?: Prisma.SortOrder
@@ -657,9 +591,6 @@ export type PostUpdateOneRequiredWithoutCommentsNestedInput = {
 
 export type PostCreateWithoutAuthorInput = {
   id?: string
-  authorName: string
-  authorUsername: string
-  authorAvatarUrl: string
   content: string
   images?: Prisma.PostCreateimagesInput | string[]
   likesCount?: number
@@ -674,9 +605,6 @@ export type PostCreateWithoutAuthorInput = {
 
 export type PostUncheckedCreateWithoutAuthorInput = {
   id?: string
-  authorName: string
-  authorUsername: string
-  authorAvatarUrl: string
   content: string
   images?: Prisma.PostCreateimagesInput | string[]
   likesCount?: number
@@ -721,9 +649,6 @@ export type PostScalarWhereInput = {
   NOT?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
   id?: Prisma.StringFilter<"Post"> | string
   authorId?: Prisma.StringFilter<"Post"> | string
-  authorName?: Prisma.StringFilter<"Post"> | string
-  authorUsername?: Prisma.StringFilter<"Post"> | string
-  authorAvatarUrl?: Prisma.StringFilter<"Post"> | string
   content?: Prisma.StringFilter<"Post"> | string
   images?: Prisma.StringNullableListFilter<"Post">
   likesCount?: Prisma.IntFilter<"Post"> | number
@@ -735,9 +660,6 @@ export type PostScalarWhereInput = {
 
 export type PostCreateWithoutLikesInput = {
   id?: string
-  authorName: string
-  authorUsername: string
-  authorAvatarUrl: string
   content: string
   images?: Prisma.PostCreateimagesInput | string[]
   likesCount?: number
@@ -753,9 +675,6 @@ export type PostCreateWithoutLikesInput = {
 export type PostUncheckedCreateWithoutLikesInput = {
   id?: string
   authorId: string
-  authorName: string
-  authorUsername: string
-  authorAvatarUrl: string
   content: string
   images?: Prisma.PostCreateimagesInput | string[]
   likesCount?: number
@@ -785,9 +704,6 @@ export type PostUpdateToOneWithWhereWithoutLikesInput = {
 
 export type PostUpdateWithoutLikesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  authorName?: Prisma.StringFieldUpdateOperationsInput | string
-  authorUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  authorAvatarUrl?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   images?: Prisma.PostUpdateimagesInput | string[]
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -803,9 +719,6 @@ export type PostUpdateWithoutLikesInput = {
 export type PostUncheckedUpdateWithoutLikesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
-  authorName?: Prisma.StringFieldUpdateOperationsInput | string
-  authorUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  authorAvatarUrl?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   images?: Prisma.PostUpdateimagesInput | string[]
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -819,9 +732,6 @@ export type PostUncheckedUpdateWithoutLikesInput = {
 
 export type PostCreateWithoutSharesInput = {
   id?: string
-  authorName: string
-  authorUsername: string
-  authorAvatarUrl: string
   content: string
   images?: Prisma.PostCreateimagesInput | string[]
   likesCount?: number
@@ -837,9 +747,6 @@ export type PostCreateWithoutSharesInput = {
 export type PostUncheckedCreateWithoutSharesInput = {
   id?: string
   authorId: string
-  authorName: string
-  authorUsername: string
-  authorAvatarUrl: string
   content: string
   images?: Prisma.PostCreateimagesInput | string[]
   likesCount?: number
@@ -869,9 +776,6 @@ export type PostUpdateToOneWithWhereWithoutSharesInput = {
 
 export type PostUpdateWithoutSharesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  authorName?: Prisma.StringFieldUpdateOperationsInput | string
-  authorUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  authorAvatarUrl?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   images?: Prisma.PostUpdateimagesInput | string[]
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -887,9 +791,6 @@ export type PostUpdateWithoutSharesInput = {
 export type PostUncheckedUpdateWithoutSharesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
-  authorName?: Prisma.StringFieldUpdateOperationsInput | string
-  authorUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  authorAvatarUrl?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   images?: Prisma.PostUpdateimagesInput | string[]
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -903,9 +804,6 @@ export type PostUncheckedUpdateWithoutSharesInput = {
 
 export type PostCreateWithoutCommentsInput = {
   id?: string
-  authorName: string
-  authorUsername: string
-  authorAvatarUrl: string
   content: string
   images?: Prisma.PostCreateimagesInput | string[]
   likesCount?: number
@@ -921,9 +819,6 @@ export type PostCreateWithoutCommentsInput = {
 export type PostUncheckedCreateWithoutCommentsInput = {
   id?: string
   authorId: string
-  authorName: string
-  authorUsername: string
-  authorAvatarUrl: string
   content: string
   images?: Prisma.PostCreateimagesInput | string[]
   likesCount?: number
@@ -953,9 +848,6 @@ export type PostUpdateToOneWithWhereWithoutCommentsInput = {
 
 export type PostUpdateWithoutCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  authorName?: Prisma.StringFieldUpdateOperationsInput | string
-  authorUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  authorAvatarUrl?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   images?: Prisma.PostUpdateimagesInput | string[]
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -971,9 +863,6 @@ export type PostUpdateWithoutCommentsInput = {
 export type PostUncheckedUpdateWithoutCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
-  authorName?: Prisma.StringFieldUpdateOperationsInput | string
-  authorUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  authorAvatarUrl?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   images?: Prisma.PostUpdateimagesInput | string[]
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -987,9 +876,6 @@ export type PostUncheckedUpdateWithoutCommentsInput = {
 
 export type PostCreateManyAuthorInput = {
   id?: string
-  authorName: string
-  authorUsername: string
-  authorAvatarUrl: string
   content: string
   images?: Prisma.PostCreateimagesInput | string[]
   likesCount?: number
@@ -1001,9 +887,6 @@ export type PostCreateManyAuthorInput = {
 
 export type PostUpdateWithoutAuthorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  authorName?: Prisma.StringFieldUpdateOperationsInput | string
-  authorUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  authorAvatarUrl?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   images?: Prisma.PostUpdateimagesInput | string[]
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1018,9 +901,6 @@ export type PostUpdateWithoutAuthorInput = {
 
 export type PostUncheckedUpdateWithoutAuthorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  authorName?: Prisma.StringFieldUpdateOperationsInput | string
-  authorUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  authorAvatarUrl?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   images?: Prisma.PostUpdateimagesInput | string[]
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1035,9 +915,6 @@ export type PostUncheckedUpdateWithoutAuthorInput = {
 
 export type PostUncheckedUpdateManyWithoutAuthorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  authorName?: Prisma.StringFieldUpdateOperationsInput | string
-  authorUsername?: Prisma.StringFieldUpdateOperationsInput | string
-  authorAvatarUrl?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   images?: Prisma.PostUpdateimagesInput | string[]
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1099,9 +976,6 @@ export type PostCountOutputTypeCountCommentsArgs<ExtArgs extends runtime.Types.E
 export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   authorId?: boolean
-  authorName?: boolean
-  authorUsername?: boolean
-  authorAvatarUrl?: boolean
   content?: boolean
   images?: boolean
   likesCount?: boolean
@@ -1119,9 +993,6 @@ export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type PostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   authorId?: boolean
-  authorName?: boolean
-  authorUsername?: boolean
-  authorAvatarUrl?: boolean
   content?: boolean
   images?: boolean
   likesCount?: boolean
@@ -1135,9 +1006,6 @@ export type PostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type PostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   authorId?: boolean
-  authorName?: boolean
-  authorUsername?: boolean
-  authorAvatarUrl?: boolean
   content?: boolean
   images?: boolean
   likesCount?: boolean
@@ -1151,9 +1019,6 @@ export type PostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type PostSelectScalar = {
   id?: boolean
   authorId?: boolean
-  authorName?: boolean
-  authorUsername?: boolean
-  authorAvatarUrl?: boolean
   content?: boolean
   images?: boolean
   likesCount?: boolean
@@ -1163,7 +1028,7 @@ export type PostSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authorId" | "authorName" | "authorUsername" | "authorAvatarUrl" | "content" | "images" | "likesCount" | "sharesCount" | "commentsCount" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
+export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authorId" | "content" | "images" | "likesCount" | "sharesCount" | "commentsCount" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
 export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   likes?: boolean | Prisma.Post$likesArgs<ExtArgs>
@@ -1189,9 +1054,6 @@ export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     authorId: string
-    authorName: string
-    authorUsername: string
-    authorAvatarUrl: string
     content: string
     images: string[]
     likesCount: number
@@ -1628,9 +1490,6 @@ export interface Prisma__PostClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface PostFieldRefs {
   readonly id: Prisma.FieldRef<"Post", 'String'>
   readonly authorId: Prisma.FieldRef<"Post", 'String'>
-  readonly authorName: Prisma.FieldRef<"Post", 'String'>
-  readonly authorUsername: Prisma.FieldRef<"Post", 'String'>
-  readonly authorAvatarUrl: Prisma.FieldRef<"Post", 'String'>
   readonly content: Prisma.FieldRef<"Post", 'String'>
   readonly images: Prisma.FieldRef<"Post", 'String[]'>
   readonly likesCount: Prisma.FieldRef<"Post", 'Int'>

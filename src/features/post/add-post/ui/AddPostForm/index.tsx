@@ -1,6 +1,6 @@
 'use client';
 
-import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
     Field,
@@ -12,15 +12,16 @@ import { Textarea } from '@/shared/ui/textarea';
 import { useFormik } from 'formik';
 import { zodValidate } from '@/shared/lib/utils/zodValidate';
 import { CreatePostInput } from '@shared/contracts/post.dto';
-import { uploadImages } from '@/features/post/add-post/api/api';
 import { useCreatePostMutation } from '@/features/post/add-post/api/hooks';
 import { toast } from 'sonner';
+import { uploadImages } from '@/shared/api/api';
 
 const MAX_IMAGES = 10;
 const MAX_SIZE_MB = 10;
 export const FORM_ID = 'add-post-form';
 
-const AddPostForm = () => {
+type Props = { className?: string };
+const AddPostForm = ({ className }: Props) => {
     const { mutateAsync, isPending } = useCreatePostMutation();
     const [files, setFiles] = useState<File[]>([]);
 
@@ -47,7 +48,7 @@ const AddPostForm = () => {
             try {
                 const op = (async () => {
                     const res = files.length
-                        ? await uploadImages(files)
+                        ? await uploadImages(files, 'posts')
                         : { urls: [] };
                     const { urls } = res;
 
@@ -93,10 +94,19 @@ const AddPostForm = () => {
 
     return (
         <AnimatePresence>
-            <form id={FORM_ID} onSubmit={form.handleSubmit}>
+            <form
+                id={FORM_ID}
+                onSubmit={form.handleSubmit}
+                className={className}
+            >
                 <FieldGroup>
                     <Field>
-                        <FieldLabel htmlFor="content">Content</FieldLabel>
+                        <FieldLabel
+                            htmlFor="content"
+                            className="visually-hidden"
+                        >
+                            Content
+                        </FieldLabel>
                         <Textarea
                             id="content"
                             name="content"

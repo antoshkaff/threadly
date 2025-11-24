@@ -1,9 +1,12 @@
 export type PublicComment = {
     id: string;
     postId: string;
-    authorId: string;
     content: string;
-    parentId?: string | null;
     createdAt: string;
-    updatedAt: string;
+    author: {
+        id: string;
+        username: string;
+        name: string;
+        avatarUrl: string;
+    };
 };

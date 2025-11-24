@@ -10,6 +10,7 @@ const userAvatarVariants = cva(
             size: {
                 md: 'size-10',
                 lg: 'size-12',
+                xl: 'size-14',
             },
         },
         defaultVariants: {
@@ -28,8 +29,8 @@ const UserAvatar = ({ className, link, size }: Props) => {
         <div className={cn(userAvatarVariants({ size }))}>
             <Image
                 src={link}
-                height={48}
-                width={48}
+                height={56}
+                width={56}
                 alt={'Profile picture'}
                 className={'object-contain'}
             />

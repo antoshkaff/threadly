@@ -30,16 +30,27 @@ model User {
   PostLike  PostLike[]
   PostShare PostShare[]
   Comment   Comment[]
+
+  subscriptions UserFollow[] @relation("UserSubscriptions")
+  subscribers   UserFollow[] @relation("UserSubscribers")
+}
+
+model UserFollow {
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower User @relation("UserSubscriptions", fields: [followerId], references: [id], onDelete: Cascade)
+
+  following User @relation("UserSubscribers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followingId])
+  @@index([followingId])
 }
 
 model Post {
-  id       String @id @default(cuid())
-  authorId String
-
-  authorName      String
-  authorUsername  String
-  authorAvatarUrl String
-
+  id            String   @id @default(cuid())
+  authorId      String
   content       String   @db.Text
   images        String[]
   likesCount    Int      @default(0)
@@ -86,16 +97,13 @@ model PostShare {
 }
 
 model Comment {
-  id       String  @id @default(cuid())
+  id       String @id @default(cuid())
   postId   String
   authorId String
-  content  String  @db.Text
-  parentId String?
+  content  String @db.Text
 
-  post    Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
-  author  User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  parent  Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
-  replies Comment[] @relation("CommentToComment")
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

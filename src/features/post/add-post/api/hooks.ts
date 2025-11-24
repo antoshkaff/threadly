@@ -1,7 +1,7 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createPost, uploadImages } from '@/features/post/add-post/api/api';
+import { createPost } from '@/features/post/add-post/api/api';
 import { POST_KEYS } from '@/entities/post/api/keys';
 import { PublicPost } from '@shared/types/post';
 import { InfiniteData } from '@tanstack/query-core';
@@ -19,8 +19,8 @@ export const useCreatePostMutation = () => {
         mutationFn: createPost,
         onSuccess: (data) => {
             const newPost = data.post;
-            queryClient.setQueryData<InfiniteData<PostsPage>>(
-                POST_KEYS.postList,
+            queryClient.setQueriesData<InfiniteData<PostsPage>>(
+                { queryKey: POST_KEYS.postList },
                 (oldPosts) => {
                     if (!oldPosts) {
                         return {

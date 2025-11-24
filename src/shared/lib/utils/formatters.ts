@@ -42,3 +42,12 @@ const formatDate = (date: Date): string => {
         year: 'numeric',
     }).format(date);
 };
+
+export const formatNumberToCompact = (value: number) => {
+    const compactFormatter = new Intl.NumberFormat('en', {
+        notation: 'compact',
+        maximumFractionDigits: 1,
+    });
+
+    return compactFormatter.format(value);
+};

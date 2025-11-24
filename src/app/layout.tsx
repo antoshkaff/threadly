@@ -2,13 +2,11 @@ import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import Providers from '@/app/providers/Providers';
-import { Sidebar } from '@/widgets/side-bar';
 import { Toaster } from '@/shared/ui/sonner';
-import { API } from '@/shared/constants/api';
 
 const plus_Jakarta_Sans = Plus_Jakarta_Sans({
     variable: '--font-plus-jakarta-sans',
-    subsets: ['latin'],
+    subsets: ['latin', 'cyrillic-ext'],
 });
 
 export const metadata: Metadata = {
@@ -27,16 +25,16 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body
-                className={`${plus_Jakarta_Sans.variable} ${plus_Jakarta_Sans.className} antialiased transition-colors duration-200 `}
+                className={`${plus_Jakarta_Sans.variable} ${plus_Jakarta_Sans.className}  antialiased transition-colors duration-200 `}
             >
                 <Providers>
                     {children}
                     <Toaster
                         toastOptions={{
                             classNames: {
-                                error: '!border !border-red-200 !bg-red-200 !text-red-900',
+                                error: '!border !border-red-200 !bg-red-200',
                                 success:
-                                    '!border !border-green-200 !bg-green-200 !text-green-800',
+                                    '!border !border-green-200 !bg-green-200',
                             },
                         }}
                     />

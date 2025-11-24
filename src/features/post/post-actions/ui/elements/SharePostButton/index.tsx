@@ -7,6 +7,7 @@ import { useLocation } from 'react-use';
 import { toast } from 'sonner';
 import { usePostShareMutation } from '@/features/post/post-actions/api/hooks';
 import { Spinner } from '@/shared/ui/spinner';
+import { formatNumberToCompact } from '@/shared/lib/utils/formatters';
 
 type Props = {
     postId: string;
@@ -14,14 +15,13 @@ type Props = {
 };
 
 const SharePostButton = ({ amount, postId }: Props) => {
-    const { origin } = useLocation();
     const { mutateAsync, isPending } = usePostShareMutation();
 
     const handleClick = async () => {
-        const url = `${origin}/post/${postId}`;
-
         try {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
+            const { url } = await mutateAsync(postId);
+
+            if (navigator.clipboard?.writeText) {
                 await navigator.clipboard.writeText(url);
             } else {
                 const textarea = document.createElement('textarea');
@@ -34,11 +34,10 @@ const SharePostButton = ({ amount, postId }: Props) => {
                 document.body.removeChild(textarea);
             }
 
-            await mutateAsync(postId);
-            toast.success('Link copied to clipboard');
+            toast.success('Post link copied to clipboard');
         } catch (e) {
             console.error(e);
-            toast.error('Failed to copy link');
+            toast.error('Failed to share post');
         }
     };
 
@@ -49,7 +48,7 @@ const SharePostButton = ({ amount, postId }: Props) => {
                 <Spinner />
             ) : (
                 <>
-                    <span>{amount}</span>
+                    <span>{formatNumberToCompact(amount)}</span>
                     <span className="max-md:hidden">Share</span>
                 </>
             )}

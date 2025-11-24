@@ -3,4 +3,6 @@ export const POST_KEYS = {
     postList: ['post-list'],
     like: ['post-like'],
     share: ['post-share'],
+    post: (postId: string) => ['post', postId],
+    delete: ['delete-post'],
 };

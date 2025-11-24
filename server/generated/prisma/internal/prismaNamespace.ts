@@ -390,6 +390,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  UserFollow: 'UserFollow',
   Post: 'Post',
   PostLike: 'PostLike',
   PostShare: 'PostShare',
@@ -409,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "post" | "postLike" | "postShare" | "comment"
+    modelProps: "user" | "userFollow" | "post" | "postLike" | "postShare" | "comment"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -484,6 +485,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    UserFollow: {
+      payload: Prisma.$UserFollowPayload<ExtArgs>
+      fields: Prisma.UserFollowFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserFollowFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFollowPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserFollowFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFollowPayload>
+        }
+        findFirst: {
+          args: Prisma.UserFollowFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFollowPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserFollowFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFollowPayload>
+        }
+        findMany: {
+          args: Prisma.UserFollowFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFollowPayload>[]
+        }
+        create: {
+          args: Prisma.UserFollowCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFollowPayload>
+        }
+        createMany: {
+          args: Prisma.UserFollowCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserFollowCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFollowPayload>[]
+        }
+        delete: {
+          args: Prisma.UserFollowDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFollowPayload>
+        }
+        update: {
+          args: Prisma.UserFollowUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFollowPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserFollowDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserFollowUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserFollowUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFollowPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserFollowUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFollowPayload>
+        }
+        aggregate: {
+          args: Prisma.UserFollowAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserFollow>
+        }
+        groupBy: {
+          args: Prisma.UserFollowGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserFollowGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserFollowCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserFollowCountAggregateOutputType> | number
         }
       }
     }
@@ -837,12 +912,18 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const UserFollowScalarFieldEnum = {
+  followerId: 'followerId',
+  followingId: 'followingId',
+  createdAt: 'createdAt'
+} as const
+
+export type UserFollowScalarFieldEnum = (typeof UserFollowScalarFieldEnum)[keyof typeof UserFollowScalarFieldEnum]
+
+
 export const PostScalarFieldEnum = {
   id: 'id',
   authorId: 'authorId',
-  authorName: 'authorName',
-  authorUsername: 'authorUsername',
-  authorAvatarUrl: 'authorAvatarUrl',
   content: 'content',
   images: 'images',
   likesCount: 'likesCount',
@@ -880,7 +961,6 @@ export const CommentScalarFieldEnum = {
   postId: 'postId',
   authorId: 'authorId',
   content: 'content',
-  parentId: 'parentId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1061,6 +1141,7 @@ export interface PrismaClientOptions {
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  userFollow?: Prisma.UserFollowOmit
   post?: Prisma.PostOmit
   postLike?: Prisma.PostLikeOmit
   postShare?: Prisma.PostShareOmit

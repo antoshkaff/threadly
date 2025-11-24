@@ -7,6 +7,7 @@ import { usePostLikeMutation } from '@/features/post/post-actions/api/hooks';
 import { Spinner } from '@/shared/ui/spinner';
 import { toast } from 'sonner';
 import { cn } from '@/shared/lib';
+import { formatNumberToCompact } from '@/shared/lib/utils/formatters';
 
 export type LikeDataProps = {
     amount: number;
@@ -40,7 +41,7 @@ const LikePostButton = ({ postId, data }: Props) => {
                 <Spinner />
             ) : (
                 <>
-                    <span>{data.amount}</span>
+                    <span>{formatNumberToCompact(data.amount)}</span>
                     <span className="max-md:hidden">Likes</span>
                 </>
             )}

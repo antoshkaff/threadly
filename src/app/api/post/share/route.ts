@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { ACCESS_COOKIE, ERROR_CODES } from '@shared/constants';
+import { ACCESS_COOKIE, APP_URL, ERROR_CODES } from '@shared/constants';
 import { AppError } from '@server/modules/error/AppError';
 import { PostService } from '@server/modules/post/post.service';
 import { requireUserId } from '@shared/requireUserId';
@@ -23,7 +23,9 @@ export async function POST(req: NextRequest) {
 
         const post = await PostService.share(userId!, id);
 
-        return NextResponse.json(post, { status: 200 });
+        const url = new URL(`/post/${id}`, APP_URL).toString();
+
+        return NextResponse.json({ post, url }, { status: 200 });
     } catch (e) {
         if (e instanceof AppError) {
             return NextResponse.json(

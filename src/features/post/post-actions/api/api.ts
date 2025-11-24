@@ -9,7 +9,10 @@ export const likePost = async (id: string) => {
 };
 
 export const sharePost = async (id: string) => {
-    return await baseFetch<PublicPost>(API.POST_SHARE(id), {
-        method: 'POST',
-    });
+    return await baseFetch<{ post: PublicPost; url: string }>(
+        API.POST_SHARE(id),
+        {
+            method: 'POST',
+        },
+    );
 };

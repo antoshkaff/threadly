@@ -49,6 +49,7 @@ export const AnyNull = runtime.objectEnumValues.instances.AnyNull
 
 export const ModelName = {
   User: 'User',
+  UserFollow: 'UserFollow',
   Post: 'Post',
   PostLike: 'PostLike',
   PostShare: 'PostShare',
@@ -86,12 +87,18 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const UserFollowScalarFieldEnum = {
+  followerId: 'followerId',
+  followingId: 'followingId',
+  createdAt: 'createdAt'
+} as const
+
+export type UserFollowScalarFieldEnum = (typeof UserFollowScalarFieldEnum)[keyof typeof UserFollowScalarFieldEnum]
+
+
 export const PostScalarFieldEnum = {
   id: 'id',
   authorId: 'authorId',
-  authorName: 'authorName',
-  authorUsername: 'authorUsername',
-  authorAvatarUrl: 'authorAvatarUrl',
   content: 'content',
   images: 'images',
   likesCount: 'likesCount',
@@ -129,7 +136,6 @@ export const CommentScalarFieldEnum = {
   postId: 'postId',
   authorId: 'authorId',
   content: 'content',
-  parentId: 'parentId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
