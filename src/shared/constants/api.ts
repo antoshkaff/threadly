@@ -4,12 +4,19 @@ export const API = {
     LOGOUT: 'user/logout',
     ME: 'user/me',
     CREATE_POST: 'post/create',
-    POST_FEED: (limit?: number, cursor?: string | null, username?: string) => {
+    POST_FEED: (
+        limit?: number,
+        cursor?: string | null,
+        username?: string,
+        onlyFollowing?: boolean,
+    ) => {
         const params = new URLSearchParams();
 
         if (limit) params.set('limit', String(limit));
         if (cursor) params.set('cursor', cursor);
         if (username) params.set('username', username);
+        if (onlyFollowing)
+            params.set('subscriptionsOnly', String(onlyFollowing));
 
         const query = params.toString();
         return query ? `post/feed?${query}` : `post/feed`;
@@ -65,10 +72,15 @@ export const API = {
 
         return `user/follow?${query}`;
     },
-    GET_FOLLOWERS: (username: string) => {
+    GET_FOLLOWERS: (
+        username: string,
+        kind: 'subscriptions' | 'subscribers',
+    ) => {
         const params = new URLSearchParams();
 
         if (username) params.set('username', username);
+        if (kind) params.set('kind', kind);
+
         const query = params.toString();
 
         return `user/follow?${query}`;
@@ -86,4 +98,6 @@ export const API = {
         return `upload?kind=${type}`;
     },
     USER_EDIT: 'user/edit',
+    RANDOM_USERS: (limit?: number) =>
+        limit ? `user/random?limit=${limit}` : 'user/random',
 };

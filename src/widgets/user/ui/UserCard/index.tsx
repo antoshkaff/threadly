@@ -6,6 +6,7 @@ import { formatNumberToCompact } from '@/shared/lib/utils/formatters';
 import FollowButton from '@/features/user/ui/FollowButton';
 import EditProfileModal from '@/features/user/ui/EditProfileModal';
 import SubscribersModal from '@/widgets/user/ui/SubscribersModal';
+import SubscriptionsModal from '@/widgets/user/ui/SubscriptionsModal';
 
 type Props = {
     profile: PublicProfile;
@@ -27,16 +28,7 @@ const UserCard = ({ profile, user, className }: Props) => {
                     <h2 className="font-semibold text-lg">{profile.name}</h2>
                     <div className="flex gap-3">
                         <SubscribersModal profile={profile} />
-                        <div className="flex flex-col">
-                            <span className="text-sm">
-                                {formatNumberToCompact(
-                                    profile.subscriptionsCount,
-                                )}
-                            </span>
-                            <span className="text-xs text-muted-foreground">
-                                Subscriptions
-                            </span>
-                        </div>
+                        <SubscriptionsModal profile={profile} />
                     </div>
                 </div>
             </div>

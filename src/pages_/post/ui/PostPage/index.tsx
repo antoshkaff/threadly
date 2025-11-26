@@ -3,7 +3,7 @@
 import React from 'react';
 import { PublicPost } from '@shared/types/post';
 import { PostCard } from '@/widgets/post';
-import { usePostDetails } from '@/pages-ui/post/api/hooks';
+import { usePostDetails } from '@/pages_/post/api/hooks';
 import { useUser } from '@/entities/user/model/store';
 import { CommentsInfinityList } from '@/widgets/comment';
 import { AddCommentForm } from '@/features/comment';

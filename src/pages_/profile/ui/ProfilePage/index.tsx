@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useProfile } from '@/pages-ui/profile/api/hooks';
+import { useProfile } from '@/pages_/profile/api/hooks';
 
 import { PostInfinityList } from '@/widgets/post';
 import { useUser } from '@/entities/user/model/store';

@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { USER_FEATURES_KEYS } from '@/features/user/api/keys';
 import { toggleFollow } from '@/features/user/api/api';
 import { toast } from 'sonner';
-import { PROFILE_KEYS } from '@/pages-ui/profile/api/keys';
+import { PROFILE_KEYS } from '@/pages_/profile/api/keys';
 import { PublicProfile } from '@shared/types/user';
 
 export const useFollowMutation = (username: string) => {

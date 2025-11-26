@@ -8,13 +8,18 @@ import { deletePost, getPostsInfinity } from '@/entities/post/api/api';
 import { InfiniteData } from '@tanstack/query-core';
 import { PublicPost } from '@shared/types/post';
 
-export const useInfinityPosts = (username?: string) => {
+export const useInfinityPosts = ({
+    username,
+    onlyFollowing,
+}: {
+    username?: string;
+    onlyFollowing?: boolean;
+}) => {
     return useInfiniteQuery({
-        queryKey: username
-            ? [...POST_KEYS.postList, username]
-            : POST_KEYS.postList,
+        queryKey: POST_KEYS.postList(username, onlyFollowing),
 
-        queryFn: ({ pageParam }) => getPostsInfinity({ pageParam, username }),
+        queryFn: ({ pageParam }) =>
+            getPostsInfinity({ pageParam, username, onlyFollowing }),
 
         initialPageParam: null as string | null,
         getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -33,10 +38,10 @@ export const useDeletePostMutation = () => {
         mutationKey: POST_KEYS.delete,
         mutationFn: deletePost,
         onSuccess: async (data) => {
-            await queryClient.cancelQueries({ queryKey: POST_KEYS.postList });
+            await queryClient.cancelQueries({ queryKey: POST_KEYS.postList() });
 
             const prev = queryClient.getQueryData<InfiniteData<PostsPage>>(
-                POST_KEYS.postList,
+                POST_KEYS.postList(),
             );
 
             if (prev) {
@@ -50,7 +55,7 @@ export const useDeletePostMutation = () => {
                     })),
                 };
 
-                queryClient.setQueryData(POST_KEYS.postList, next);
+                queryClient.setQueryData(POST_KEYS.postList(), next);
             }
 
             queryClient.removeQueries({

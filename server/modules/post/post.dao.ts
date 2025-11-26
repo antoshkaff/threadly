@@ -1,4 +1,3 @@
-// server/modules/post/post.dao.ts
 import { prisma } from '@server/shared/prisma';
 import { PublicPost } from '@shared/types/post';
 import { Post, User } from '@server/generated/prisma/client';
@@ -40,11 +39,31 @@ export const PostDAO = {
         });
     },
 
-    listFeed(params: { cursor?: string; limit: number; authorId?: string }) {
-        const { cursor, limit, authorId } = params;
+    listFeed(params: {
+        cursor?: string;
+        limit: number;
+        authorId?: string;
+        onlyFollowing?: boolean;
+        viewerId?: string;
+    }) {
+        const { cursor, limit, authorId, onlyFollowing, viewerId } = params;
+
+        const where: any = {};
+
+        if (authorId) {
+            where.authorId = authorId;
+        } else if (onlyFollowing && viewerId) {
+            where.author = {
+                subscribers: {
+                    some: {
+                        followerId: viewerId,
+                    },
+                },
+            };
+        }
 
         return prisma.post.findMany({
-            where: authorId ? { authorId } : undefined,
+            where: Object.keys(where).length ? where : undefined,
             orderBy: { createdAt: 'desc' },
             take: limit + 1,
             cursor: cursor ? { id: cursor } : undefined,

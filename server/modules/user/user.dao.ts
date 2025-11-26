@@ -99,6 +99,37 @@ export class UserDAO {
             data,
         });
     }
+
+    static async getSubscriptions(userId: string) {
+        const subs = await prisma.userFollow.findMany({
+            where: { followerId: userId },
+            include: {
+                following: {
+                    select: { name: true, username: true, avatarUrl: true },
+                },
+            },
+            orderBy: { createdAt: 'desc' },
+        });
+
+        return subs.map((s) => s.following);
+    }
+
+    static async getRandomUsers(limit: number, excludeUserId?: string) {
+        if (excludeUserId) {
+            return prisma.$queryRaw<User[]>`
+                SELECT * FROM "User"
+                WHERE "id" <> ${excludeUserId}
+                ORDER BY RANDOM()
+                LIMIT ${limit}
+            `;
+        }
+
+        return prisma.$queryRaw<User[]>`
+            SELECT * FROM "User"
+            ORDER BY RANDOM()
+            LIMIT ${limit}
+        `;
+    }
 }
 
 export function toPublicDTO(u: User) {

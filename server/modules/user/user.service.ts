@@ -99,6 +99,15 @@ export class UserService {
         return UserDAO.getFollowers(user.id);
     }
 
+    static async getSubscriptionsByUsername(username: string) {
+        const user = await UserDAO.findByUsername(username);
+        if (!user) {
+            throw new AppError(ERROR_CODES.not_found, 'User not found', 404);
+        }
+
+        return UserDAO.getSubscriptions(user.id);
+    }
+
     static async getProfileByUsername(
         username: string,
         viewerId?: string | null,
@@ -142,5 +151,13 @@ export class UserService {
         });
 
         return toPublicDTO(updated);
+    }
+
+    static async getRandomUsers(limit = 5, excludeUserId?: string) {
+        const safeLimit = Math.min(Math.max(limit, 1), 50);
+
+        const users = await UserDAO.getRandomUsers(safeLimit, excludeUserId);
+
+        return users.map((u) => toPublicDTO(u));
     }
 }

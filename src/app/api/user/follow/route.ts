@@ -49,6 +49,7 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
     try {
         const usernameParam = req.nextUrl.searchParams.get('username');
+        const kind = req.nextUrl.searchParams.get('kind') ?? 'subscribers';
 
         if (!usernameParam) {
             throw new AppError(
@@ -58,10 +59,16 @@ export async function GET(req: NextRequest) {
             );
         }
 
-        const followers =
-            await UserService.getFollowersByUsername(usernameParam);
+        let result;
 
-        return NextResponse.json(followers, { status: 200 });
+        if (kind === 'subscriptions') {
+            result =
+                await UserService.getSubscriptionsByUsername(usernameParam);
+        } else {
+            result = await UserService.getFollowersByUsername(usernameParam);
+        }
+
+        return NextResponse.json(result, { status: 200 });
     } catch (e) {
         if (e instanceof AppError) {
             return NextResponse.json(

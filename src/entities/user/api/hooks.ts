@@ -9,7 +9,7 @@ import { logout } from '@/entities/user/api/api';
 import { useEffect } from 'react';
 import { ERROR_CODES } from '@shared/constants';
 import { PublicProfile, PublicUser } from '@shared/types/user';
-import { PROFILE_KEYS } from '@/pages-ui/profile/api/keys';
+import { PROFILE_KEYS } from '@/pages_/profile/api/keys';
 import { POST_KEYS } from '@/entities/post/api/keys';
 
 export const useLoginMutation = () => {

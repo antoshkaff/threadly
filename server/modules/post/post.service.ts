@@ -63,10 +63,12 @@ export const PostService = {
         cursor?: string;
         limit?: number;
         username?: string;
+        subscriptionsOnly?: boolean;
     }): Promise<{ items: PublicPostWithMeta[]; nextCursor?: string }> {
         const limit = Math.min(Math.max(params.limit ?? 20, 1), 50);
 
         let authorId: string | undefined;
+        let onlyFollowing = false;
 
         if (params.username) {
             const user = await UserDAO.findByUsername(params.username);
@@ -78,12 +80,16 @@ export const PostService = {
                 );
             }
             authorId = user.id;
+        } else if (params.subscriptionsOnly && params.viewerId) {
+            onlyFollowing = true;
         }
 
         const rows = await PostDAO.listFeed({
             cursor: params.cursor,
             limit,
             authorId,
+            onlyFollowing,
+            viewerId: params.viewerId,
         });
 
         const hasMore = rows.length > limit;

@@ -5,12 +5,14 @@ import { PublicPost } from '@shared/types/post';
 export const getPostsInfinity = async ({
     pageParam,
     username,
+    onlyFollowing,
 }: {
     pageParam: string | null;
     username?: string;
+    onlyFollowing?: boolean;
 }) => {
     return await baseFetch<{ items: PublicPost[]; nextCursor: string }>(
-        API.POST_FEED(5, pageParam, username),
+        API.POST_FEED(5, pageParam, username, onlyFollowing),
     );
 };
 

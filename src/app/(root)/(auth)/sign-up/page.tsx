@@ -1,4 +1,4 @@
-import { SignUpPage } from '@/pages-ui/sign-up';
+import { SignUpPage } from '@/pages_/sign-up';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {

@@ -16,8 +16,9 @@ import { FileText } from 'lucide-react';
 
 type Props = {
     username?: string;
+    onlyFollowing?: boolean;
 };
-const PostInfinityList = ({ username }: Props) => {
+const PostInfinityList = ({ username, onlyFollowing }: Props) => {
     const {
         data,
         fetchNextPage,
@@ -26,7 +27,7 @@ const PostInfinityList = ({ username }: Props) => {
         isLoading,
         isError,
         isPending,
-    } = useInfinityPosts(username);
+    } = useInfinityPosts({ username, onlyFollowing });
 
     const items = data?.pages.flatMap((page) => page.items);
     const user = useUser((state) => state.user);

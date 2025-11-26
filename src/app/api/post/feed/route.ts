@@ -4,14 +4,14 @@ import { PostService } from '@server/modules/post/post.service';
 import { cookies } from 'next/headers';
 import { ACCESS_COOKIE, ERROR_CODES } from '@shared/constants';
 import { verifyAccess } from '@shared/jwt';
-
 export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const cursor = searchParams.get('cursor') ?? undefined;
     const limitParam = searchParams.get('limit');
     const limit = limitParam ? Number(limitParam) : undefined;
 
-    const username = searchParams.get('username') ?? undefined; // вот фильтр
+    const username = searchParams.get('username') ?? undefined;
+    const subscriptionsOnly = !!searchParams.get('subscriptionsOnly');
 
     try {
         const jar = await cookies();
@@ -33,6 +33,7 @@ export async function GET(req: Request) {
             cursor,
             limit,
             username,
+            subscriptionsOnly,
         });
 
         return NextResponse.json(data, { status: 200 });

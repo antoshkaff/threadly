@@ -1,4 +1,4 @@
-import { FriendsPage } from '@/pages-ui/friends';
+import { FriendsPage } from '@/pages_/friends';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {

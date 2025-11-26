@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { baseFetch } from '@/shared/api/baseFetch';
 import type { PublicPost } from '@shared/types/post';
 import { API } from '@/shared/constants/api';
-import { PostPage } from '@/pages-ui/post';
+import { PostPage } from '@/pages_/post';
 import { PublicComment } from '@shared/types/comment';
 import { APP_URL } from '@shared/constants';
 

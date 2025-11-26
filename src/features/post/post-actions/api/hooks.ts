@@ -22,7 +22,7 @@ export const usePostLikeMutation = () => {
                     items: PublicPost[];
                     nextCursor?: string | null;
                 }>
-            >({ queryKey: POST_KEYS.postList }, (old) => {
+            >({ queryKey: POST_KEYS.postList() }, (old) => {
                 if (!old) return old;
                 return {
                     ...old,
@@ -55,7 +55,7 @@ export const usePostShareMutation = () => {
         mutationFn: sharePost,
         onSuccess: ({ post }, postId) => {
             queryClient.setQueriesData<InfiniteData<PostsPage>>(
-                { queryKey: POST_KEYS.postList },
+                { queryKey: POST_KEYS.postList() },
                 (old) => {
                     if (!old) return old;
                     return {

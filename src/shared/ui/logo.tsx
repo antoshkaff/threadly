@@ -3,6 +3,8 @@ import logo from '@/shared/assets/logo.svg';
 import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/lib';
 import Image from 'next/image';
+import Link from 'next/link';
+import { ROUTES } from '@/shared/config/routes.config';
 
 type Props = {
     className?: string;
@@ -10,7 +12,10 @@ type Props = {
 
 const Logo = ({ className }: Props) => {
     return (
-        <div className={cn('inline-flex gap-2 items-center', className)}>
+        <Link
+            href={ROUTES.HOME}
+            className={cn('inline-flex gap-2 items-center', className)}
+        >
             <Image
                 height={32}
                 width={32}
@@ -20,7 +25,7 @@ const Logo = ({ className }: Props) => {
                 priority
             />
             <h1 className="font-extrabold">Threadly</h1>
-        </div>
+        </Link>
     );
 };
 

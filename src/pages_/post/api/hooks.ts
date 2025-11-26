@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { POST_KEYS } from '@/entities/post/api/keys';
-import { getPost } from '@/pages-ui/post/api/api';
+import { getPost } from '@/pages_/post/api/api';
 import { PublicPost } from '@shared/types/post';
 
 export const usePostDetails = ({
