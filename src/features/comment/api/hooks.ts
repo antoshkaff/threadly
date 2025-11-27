@@ -24,7 +24,7 @@ export const useAddCommentMutation = () => {
         mutationFn: addComment,
         onSuccess: ({ comment }) => {
             queryClient.setQueriesData<InfiniteData<PostsPage>>(
-                { queryKey: POST_KEYS.postList },
+                { queryKey: POST_KEYS.postList() },
                 (oldPages) => {
                     if (!oldPages) {
                         return;

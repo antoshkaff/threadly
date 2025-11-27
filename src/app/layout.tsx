@@ -32,9 +32,9 @@ export default function RootLayout({
                     <Toaster
                         toastOptions={{
                             classNames: {
-                                error: '!border !border-red-200 !bg-red-200',
+                                error: '!border !border-red-200 !bg-red-200 !text-black',
                                 success:
-                                    '!border !border-green-200 !bg-green-200',
+                                    '!border !border-green-200 !bg-green-200 !text-black',
                             },
                         }}
                     />

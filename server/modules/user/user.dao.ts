@@ -11,6 +11,30 @@ export class UserDAO {
     static findById(id: string) {
         return prisma.user.findUnique({ where: { id } });
     }
+    static async search(q: string, limit: number) {
+        const users = await prisma.user.findMany({
+            where: {
+                OR: [
+                    {
+                        username: {
+                            contains: q,
+                            mode: 'insensitive',
+                        },
+                    },
+                    {
+                        name: {
+                            contains: q,
+                            mode: 'insensitive',
+                        },
+                    },
+                ],
+            },
+            orderBy: { createdAt: 'desc' },
+            take: limit,
+        });
+
+        return users;
+    }
     static create(data: {
         username: string;
         email: string;

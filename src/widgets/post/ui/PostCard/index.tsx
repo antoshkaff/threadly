@@ -9,10 +9,6 @@ import { AddCommentForm } from '@/features/comment';
 import PostMenu from '@/widgets/post/ui/PostMenu';
 import { cva, VariantProps } from 'class-variance-authority';
 import { cn } from '@/shared/lib';
-import Link from 'next/link';
-import { ROUTES } from '@/shared/config/routes.config';
-import { ArrowLeft } from 'lucide-react';
-import { Button } from '@/shared/ui/button';
 import BackButton from '@/shared/ui/BackButton';
 
 const cardVariants = cva(

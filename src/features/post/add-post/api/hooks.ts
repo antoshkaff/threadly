@@ -20,7 +20,7 @@ export const useCreatePostMutation = () => {
         onSuccess: (data) => {
             const newPost = data.post;
             queryClient.setQueriesData<InfiniteData<PostsPage>>(
-                { queryKey: POST_KEYS.postList },
+                { queryKey: POST_KEYS.postList() },
                 (oldPosts) => {
                     if (!oldPosts) {
                         return {

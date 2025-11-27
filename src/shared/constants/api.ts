@@ -100,4 +100,16 @@ export const API = {
     USER_EDIT: 'user/edit',
     RANDOM_USERS: (limit?: number) =>
         limit ? `user/random?limit=${limit}` : 'user/random',
+    SEARCH: (q: string, types?: ('posts' | 'comments' | 'users')[] | null) => {
+        const params = new URLSearchParams();
+
+        if (q) params.set('q', q);
+
+        if (types && types.length) {
+            params.set('type', types.join(','));
+        }
+
+        const query = params.toString();
+        return query ? `search?${query}` : 'search';
+    },
 };

@@ -73,7 +73,7 @@ export const useEditUserMutation = (user: PublicUser) => {
                     avatarUrl: data.avatarUrl,
                 }),
             );
-            queryClient.invalidateQueries({ queryKey: POST_KEYS.postList });
+            queryClient.invalidateQueries({ queryKey: POST_KEYS.postList() });
         },
     });
 };

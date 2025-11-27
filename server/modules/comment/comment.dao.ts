@@ -19,6 +19,34 @@ export const CommentDAO = {
         });
     },
 
+    searchByContent(q: string, limit: number) {
+        return prisma.comment.findMany({
+            where: {
+                content: {
+                    contains: q,
+                    mode: 'insensitive',
+                },
+            },
+            orderBy: { createdAt: 'desc' },
+            take: limit,
+            include: {
+                author: {
+                    select: {
+                        id: true,
+                        username: true,
+                        name: true,
+                        avatarUrl: true,
+                    },
+                },
+                post: {
+                    select: {
+                        id: true,
+                    },
+                },
+            },
+        });
+    },
+
     create(data: { postId: string; authorId: string; content: string }) {
         return prisma.comment.create({
             data: {

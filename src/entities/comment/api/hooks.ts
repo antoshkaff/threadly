@@ -77,7 +77,7 @@ export const useDeleteCommentMutation = () => {
             );
 
             queryClient.setQueryData<InfiniteData<PostsPage>>(
-                POST_KEYS.postList,
+                POST_KEYS.postList(),
                 (old) => {
                     if (!old) return old;
 

@@ -128,6 +128,29 @@ export const PostDAO = {
             where: { id },
         });
     },
+
+    searchByContent(q: string, limit: number) {
+        return prisma.post.findMany({
+            where: {
+                content: {
+                    contains: q,
+                    mode: 'insensitive',
+                },
+            },
+            orderBy: { createdAt: 'desc' },
+            take: limit,
+            include: {
+                author: {
+                    select: {
+                        id: true,
+                        username: true,
+                        name: true,
+                        avatarUrl: true,
+                    },
+                },
+            },
+        });
+    },
 };
 
 type PostWithAuthor = Post & {

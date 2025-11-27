@@ -1,8 +1,20 @@
-import React, { InputHTMLAttributes } from 'react';
+'use client';
+
+import React, {
+    ChangeEvent,
+    FormEvent,
+    InputHTMLAttributes,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import { Input } from '@/shared/ui/input';
 import { Search as SearchIcon } from 'lucide-react';
 import { useId } from 'react';
 import { cn } from '@/shared/lib';
+import { Button } from '@/shared/ui/button';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ROUTES } from '@/shared/config/routes.config';
 
 type IconPosition = 'start' | 'end';
 
@@ -10,38 +22,61 @@ type Props = {
     className?: string;
     inputClassName?: string;
     iconPosition: IconPosition;
+    value: string;
+    redirect?: boolean;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 const Search = ({
     iconPosition,
     className,
     inputClassName,
+    redirect = true,
     ...props
 }: Props) => {
     const id = useId();
+    const router = useRouter();
+
+    const inputRef = useRef<null | HTMLInputElement>(null);
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const query = inputRef.current?.value;
+        if (!query || !inputRef.current) return;
+
+        const params = new URLSearchParams();
+        params.set('q', query);
+
+        router.push(ROUTES.SEARCH(params.toString()));
+        inputRef.current.value = '';
+    };
 
     return (
-        <div className={cn('relative', className)}>
-            <label htmlFor={id} className="visually-hidden">
-                Search
-            </label>
+        <form onSubmit={handleSubmit}>
+            <div className={cn('relative', className)}>
+                <label htmlFor={id} className="visually-hidden">
+                    Search
+                </label>
 
-            <SearchIcon
-                className={cn(
-                    'size-5 absolute text-accent  top-1/2 -translate-y-1/2',
-                    iconPosition === 'start' ? 'left-4' : 'right-4',
-                )}
-            />
+                <button aria-label={'search'} type={'submit'}>
+                    <SearchIcon
+                        className={cn(
+                            'size-5 absolute text-accent  top-1/2 -translate-y-1/2',
+                            iconPosition === 'start' ? 'left-4' : 'right-4',
+                        )}
+                    />
+                </button>
 
-            <Input
-                {...props}
-                className={cn(
-                    iconPosition === 'start' ? 'pl-10' : 'pr-10',
-                    inputClassName,
-                )}
-                id={id}
-            />
-        </div>
+                <Input
+                    {...props}
+                    ref={inputRef}
+                    className={cn(
+                        iconPosition === 'start' ? 'pl-10' : 'pr-10',
+                        inputClassName,
+                    )}
+                    id={id}
+                />
+            </div>
+        </form>
     );
 };
 

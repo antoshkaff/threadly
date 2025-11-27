@@ -1,0 +1,140 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import SearchFilters from '@/features/search/ui/SearchFilters';
+import SearchForm from '@/features/search/ui/SearchForm';
+import { useSearch } from '@/features/search/api/hooks';
+import { useSearchStore } from '@/features/search/model/store';
+import { useDebounce, useLocation } from 'react-use';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { SEARCH_TABS } from '@/features/search/model/constants';
+import { SEARCH_TABS_CONFIG } from '@/features/search/model/config';
+import { SearchResponse } from '@/features/search/model/types';
+import { useUser } from '@/entities/user/model/store';
+import { Skeleton } from '@/shared/ui/skeleton';
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/shared/ui/empty';
+import { Search } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+
+const isEmptyForTab = (tabValue: string, data?: SearchResponse) => {
+    if (!data) return true;
+
+    switch (tabValue) {
+        case SEARCH_TABS.POSTS:
+            return data.posts.length === 0;
+        case SEARCH_TABS.COMMENTS:
+            return data.comments.length === 0;
+        case SEARCH_TABS.USERS:
+            return data.users.length === 0;
+        case SEARCH_TABS.ALL:
+        default:
+            return (
+                data.posts.length === 0 &&
+                data.comments.length === 0 &&
+                data.users.length === 0
+            );
+    }
+};
+
+const SearchPage = () => {
+    const params = useSearchParams();
+    const searchParamsQuery = params.get('q');
+
+    const q = useSearchStore((s) => s.q);
+    const setQuery = useSearchStore((s) => s.setQuery);
+    const filters = useSearchStore((s) => s.filters);
+    const user = useUser((s) => s.user);
+    const [debouncedQ, setDebouncedQ] = useState(q);
+
+    useEffect(() => {
+        if (!searchParamsQuery) return;
+
+        setQuery(searchParamsQuery);
+        setDebouncedQ(searchParamsQuery);
+    }, [searchParamsQuery]);
+
+    useDebounce(() => setDebouncedQ(q), 400, [q]);
+
+    const { data, isLoading } = useSearch({
+        q: debouncedQ,
+        type: filters,
+        enabled: !!debouncedQ.trim(),
+    });
+
+    return (
+        <section className="grid grid-cols-[1fr_260px] min-h-screen">
+            <section>
+                <div className="p-3 bg-[var(--background-second)] border border-[--border] border-l-0 border-r-0">
+                    <SearchForm inputClassName="h-12" />
+                </div>
+                <Tabs defaultValue={SEARCH_TABS.ALL}>
+                    <TabsList className="h-fit w-full sticky top-0">
+                        {SEARCH_TABS_CONFIG.map((tab) => (
+                            <TabsTrigger
+                                key={tab.value}
+                                value={tab.value}
+                                className="py-2 w-full font-semibold"
+                            >
+                                {tab.content}
+                            </TabsTrigger>
+                        ))}
+                    </TabsList>
+                    {SEARCH_TABS_CONFIG.map((tab) => {
+                        const isEmpty = isEmptyForTab(tab.value, data);
+
+                        return (
+                            <TabsContent
+                                key={tab.value}
+                                value={tab.value}
+                                className="px-5"
+                            >
+                                <div className="py-3">
+                                    {!isLoading ? (
+                                        data && tab.render(data, user)
+                                    ) : (
+                                        <ul className={'flex flex-col gap-4'}>
+                                            {Array.from({ length: 10 }).map(
+                                                (_, i) => (
+                                                    <li key={i}>
+                                                        <Skeleton className="h-[240px] w-full" />
+                                                    </li>
+                                                ),
+                                            )}
+                                        </ul>
+                                    )}
+                                    {isEmpty && (
+                                        <Empty>
+                                            <EmptyHeader>
+                                                <EmptyMedia variant="icon">
+                                                    <Search />
+                                                </EmptyMedia>
+                                                <EmptyTitle>
+                                                    No results found
+                                                </EmptyTitle>
+                                                <EmptyDescription>
+                                                    Try a different keyword or
+                                                    adjust your filters to
+                                                    discover more results.
+                                                </EmptyDescription>
+                                            </EmptyHeader>
+                                        </Empty>
+                                    )}
+                                </div>
+                            </TabsContent>
+                        );
+                    })}
+                </Tabs>
+            </section>
+
+            <SearchFilters />
+        </section>
+    );
+};
+
+export default SearchPage;
