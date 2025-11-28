@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Button } from '@/shared/ui/button';
 import { useFollowMutation } from '@/features/user/api/hooks';
 import { Spinner } from '@/shared/ui/spinner';
+import { useRequireAuth } from '@/shared/lib';
 
 type Props = {
     username: string;
@@ -13,8 +14,11 @@ type Props = {
 const FollowButton = ({ username, isFollowedInitial, className }: Props) => {
     const { mutateAsync, isPending } = useFollowMutation(username);
     const [isFollowed, setIsFollowed] = useState(isFollowedInitial);
+    const { isAuth } = useRequireAuth();
 
     const handleClick = async () => {
+        if (!isAuth()) return;
+
         const { followed } = await mutateAsync(username);
         setIsFollowed(followed);
     };

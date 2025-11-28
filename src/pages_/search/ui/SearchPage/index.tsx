@@ -21,6 +21,7 @@ import {
 } from '@/shared/ui/empty';
 import { Search } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const isEmptyForTab = (tabValue: string, data?: SearchResponse) => {
     if (!data) return true;
@@ -67,13 +68,15 @@ const SearchPage = () => {
         enabled: !!debouncedQ.trim(),
     });
 
+    const [activeTab, setActiveTab] = useState(SEARCH_TABS.ALL);
+
     return (
         <section className="grid grid-cols-[1fr_260px] min-h-screen">
             <section>
                 <div className="p-3 bg-[var(--background-second)] border border-[--border] border-l-0 border-r-0">
                     <SearchForm inputClassName="h-12" />
                 </div>
-                <Tabs defaultValue={SEARCH_TABS.ALL}>
+                <Tabs value={activeTab} onValueChange={setActiveTab}>
                     <TabsList className="h-fit w-full sticky top-0">
                         {SEARCH_TABS_CONFIG.map((tab) => (
                             <TabsTrigger
@@ -85,50 +88,67 @@ const SearchPage = () => {
                             </TabsTrigger>
                         ))}
                     </TabsList>
-                    {SEARCH_TABS_CONFIG.map((tab) => {
-                        const isEmpty = isEmptyForTab(tab.value, data);
+                    <AnimatePresence mode={'wait'}>
+                        {SEARCH_TABS_CONFIG.map((tab) => {
+                            const isEmpty = isEmptyForTab(tab.value, data);
+                            if (tab.value !== activeTab) return null;
 
-                        return (
-                            <TabsContent
-                                key={tab.value}
-                                value={tab.value}
-                                className="px-5"
-                            >
-                                <div className="py-3">
-                                    {!isLoading ? (
-                                        data && tab.render(data, user)
-                                    ) : (
-                                        <ul className={'flex flex-col gap-4'}>
-                                            {Array.from({ length: 10 }).map(
-                                                (_, i) => (
-                                                    <li key={i}>
-                                                        <Skeleton className="h-[240px] w-full" />
-                                                    </li>
-                                                ),
+                            return (
+                                <motion.div
+                                    key={tab.value}
+                                    initial={{ opacity: 0, y: 2 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -2 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    <TabsContent
+                                        key={tab.value}
+                                        value={tab.value}
+                                        className="px-5"
+                                    >
+                                        <div className="py-3">
+                                            {!isLoading ? (
+                                                data && tab.render(data, user)
+                                            ) : (
+                                                <ul
+                                                    className={
+                                                        'flex flex-col gap-4'
+                                                    }
+                                                >
+                                                    {Array.from({
+                                                        length: 10,
+                                                    }).map((_, i) => (
+                                                        <li key={i}>
+                                                            <Skeleton className="h-[240px] w-full" />
+                                                        </li>
+                                                    ))}
+                                                </ul>
                                             )}
-                                        </ul>
-                                    )}
-                                    {isEmpty && (
-                                        <Empty>
-                                            <EmptyHeader>
-                                                <EmptyMedia variant="icon">
-                                                    <Search />
-                                                </EmptyMedia>
-                                                <EmptyTitle>
-                                                    No results found
-                                                </EmptyTitle>
-                                                <EmptyDescription>
-                                                    Try a different keyword or
-                                                    adjust your filters to
-                                                    discover more results.
-                                                </EmptyDescription>
-                                            </EmptyHeader>
-                                        </Empty>
-                                    )}
-                                </div>
-                            </TabsContent>
-                        );
-                    })}
+                                            {isEmpty && (
+                                                <Empty>
+                                                    <EmptyHeader>
+                                                        <EmptyMedia variant="icon">
+                                                            <Search />
+                                                        </EmptyMedia>
+                                                        <EmptyTitle>
+                                                            No results found
+                                                        </EmptyTitle>
+                                                        <EmptyDescription>
+                                                            Try a different
+                                                            keyword or adjust
+                                                            your filters to
+                                                            discover more
+                                                            results.
+                                                        </EmptyDescription>
+                                                    </EmptyHeader>
+                                                </Empty>
+                                            )}
+                                        </div>
+                                    </TabsContent>
+                                </motion.div>
+                            );
+                        })}
+                    </AnimatePresence>
                 </Tabs>
             </section>
 

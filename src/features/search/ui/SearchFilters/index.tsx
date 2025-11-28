@@ -15,6 +15,7 @@ const SearchFilters = () => {
 
     return (
         <section className="bg-[var(--background-second)] p-5 flex flex-col gap-3 border border-[--border]">
+            <h2 className="text-foreground text-lg font-semibold">Filters</h2>
             <div className="flex gap-2">
                 <Checkbox
                     id={SEARCH_FILTERS.POSTS}

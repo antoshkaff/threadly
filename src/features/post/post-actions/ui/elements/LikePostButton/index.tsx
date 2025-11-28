@@ -6,7 +6,7 @@ import { Button } from '@/shared/ui/button';
 import { usePostLikeMutation } from '@/features/post/post-actions/api/hooks';
 import { Spinner } from '@/shared/ui/spinner';
 import { toast } from 'sonner';
-import { cn } from '@/shared/lib';
+import { cn, useRequireAuth } from '@/shared/lib';
 import { formatNumberToCompact } from '@/shared/lib/utils/formatters';
 
 export type LikeDataProps = {
@@ -20,8 +20,11 @@ type Props = {
 
 const LikePostButton = ({ postId, data }: Props) => {
     const { mutateAsync, isPending } = usePostLikeMutation();
+    const { isAuth } = useRequireAuth();
 
     const handleClick = async () => {
+        if (!isAuth()) return;
+
         try {
             await mutateAsync(postId);
         } catch (e) {

@@ -7,18 +7,20 @@ import PageTransition from '@/shared/ui/PageTransition';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
     return (
-        <main className="min-h-screen flex justify-center items-center relative px-12 py-12">
-            <Button
-                variant={'ghost'}
-                size={'icon-lg'}
-                className="fixed top-3 left-4"
-                asChild
-            >
-                <Link href={ROUTES.HOME}>
-                    <ArrowLeft className="size-8" />
-                </Link>
-            </Button>
-            {children}
-        </main>
+        <PageTransition>
+            <main className="min-h-screen flex justify-center items-center relative px-12 py-12">
+                <Button
+                    variant={'ghost'}
+                    size={'icon-lg'}
+                    className="fixed top-3 left-4"
+                    asChild
+                >
+                    <Link href={ROUTES.HOME}>
+                        <ArrowLeft className="size-8" />
+                    </Link>
+                </Button>
+                {children}
+            </main>
+        </PageTransition>
     );
 }

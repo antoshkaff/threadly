@@ -22,7 +22,7 @@ type Props = {
     className?: string;
     inputClassName?: string;
     iconPosition: IconPosition;
-    value: string;
+    value?: string;
     redirect?: boolean;
 } & InputHTMLAttributes<HTMLInputElement>;
 

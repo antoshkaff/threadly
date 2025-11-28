@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { usePostShareMutation } from '@/features/post/post-actions/api/hooks';
 import { Spinner } from '@/shared/ui/spinner';
 import { formatNumberToCompact } from '@/shared/lib/utils/formatters';
+import { useRequireAuth } from '@/shared/lib';
 
 type Props = {
     postId: string;
@@ -16,8 +17,11 @@ type Props = {
 
 const SharePostButton = ({ amount, postId }: Props) => {
     const { mutateAsync, isPending } = usePostShareMutation();
+    const { isAuth } = useRequireAuth();
 
     const handleClick = async () => {
+        if (!isAuth()) return;
+
         try {
             const { url } = await mutateAsync(postId);
 

@@ -32,7 +32,7 @@ export const useLogoutMutation = () => {
 
     return useMutation({
         mutationFn: logout,
-        onSuccess: (data) => {
+        onSuccess: () => {
             setUser(null);
             router.refresh();
         },
