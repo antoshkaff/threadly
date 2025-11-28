@@ -6,7 +6,7 @@ import { Input } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { ROUTES } from '@/shared/config/routes.config';
-import { useLoginMutation } from '@/features/auth/api/hooks';
+import { useLoginMutation } from '@/entities/user';
 import { useFormik } from 'formik';
 import { zodValidate } from '@/shared/lib/utils/zodValidate';
 import { LoginInput } from '@shared/contracts/user.dto';

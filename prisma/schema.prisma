@@ -15,13 +15,98 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(cuid())
-  username String  @unique
-  email    String  @unique
-  name     String
-  bio      String? @db.Text
+  id        String  @id @default(cuid())
+  username  String  @unique
+  email     String  @unique
+  name      String
+  bio       String? @db.Text
+  avatarUrl String
 
   passwordHash String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  Post      Post[]
+  PostLike  PostLike[]
+  PostShare PostShare[]
+  Comment   Comment[]
+
+  subscriptions UserFollow[] @relation("UserSubscriptions")
+  subscribers   UserFollow[] @relation("UserSubscribers")
+}
+
+model UserFollow {
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower User @relation("UserSubscriptions", fields: [followerId], references: [id], onDelete: Cascade)
+
+  following User @relation("UserSubscribers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followingId])
+  @@index([followingId])
+}
+
+model Post {
+  id            String   @id @default(cuid())
+  authorId      String
+  content       String   @db.Text
+  images        String[]
+  likesCount    Int      @default(0)
+  sharesCount   Int      @default(0)
+  commentsCount Int      @default(0)
+
+  author   User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes    PostLike[]
+  shares   PostShare[]
+  comments Comment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([authorId, createdAt])
+}
+
+model PostLike {
+  id     String @id @default(cuid())
+  postId String
+  userId String
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([postId, userId])
+  @@index([userId])
+}
+
+model PostShare {
+  id     String @id @default(cuid())
+  postId String
+  userId String
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([postId])
+  @@index([userId])
+}
+
+model Comment {
+  id       String @id @default(cuid())
+  postId   String
+  authorId String
+  content  String @db.Text
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([postId, createdAt])
 }

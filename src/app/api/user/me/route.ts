@@ -17,6 +17,14 @@ export async function GET(req: Request) {
 
     try {
         const payload = await verifyAccess<{ sub: string }>(token);
+
+        if (!payload.sub) {
+            return NextResponse.json(
+                { code: ERROR_CODES.not_found },
+                { status: 404 },
+            );
+        }
+
         const user = await UserDAO.findById(payload.sub);
         if (!user) {
             return NextResponse.json(

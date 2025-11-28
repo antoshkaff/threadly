@@ -16,12 +16,6 @@ export const NAV_CONFIG: NavItem[] = [
         isPrivate: false,
     },
     {
-        label: 'Friends',
-        icon: Users,
-        href: ROUTES.FRIENDS,
-        isPrivate: true,
-    },
-    {
         label: 'Profile',
         icon: User,
         href: (username: string) => ROUTES.PROFILE(username),

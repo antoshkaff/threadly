@@ -1,7 +1,6 @@
 import React from 'react';
 import { UserAvatar } from '@/entities/user';
 
-import { NotificationMenu } from '@/features/notification-menu';
 import { ToggleThemeButton } from '@/features/toggle-theme';
 import { cn } from '@/shared/lib';
 
@@ -25,10 +24,9 @@ const HeaderActions = async ({ className }: Props) => {
             )}
         >
             {!!user ? (
-                <>
-                    <UserAvatar size={'lg'} />
-                    <NotificationMenu />
-                </>
+                <Link href={ROUTES.PROFILE(user.username)}>
+                    <UserAvatar size={'lg'} link={user.avatarUrl} />
+                </Link>
             ) : (
                 <Button className="font-medium rounded-2xl" size={'lg'} asChild>
                     <Link href={ROUTES.SIGN_IN}>Sign in</Link>

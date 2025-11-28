@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import {
     useLoginMutation,
     useRegisterMutation,
-} from '@/features/auth/api/hooks';
+} from '@/entities/user/api/hooks';
 import { useUser } from '@/entities/user/model/store';
 import { useFormik } from 'formik';
 import { zodValidate } from '@/shared/lib/utils/zodValidate';

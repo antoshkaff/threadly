@@ -2,11 +2,10 @@ import React from 'react';
 import { cn } from '@/shared/lib';
 import { Search } from '@/features/search';
 import HeaderActions from '@/widgets/header/ui/elements/HeaderActions';
-import { Plus } from 'lucide-react';
-import { Button } from '@/shared/ui/button';
 import SideBarMobile from '@/widgets/side-bar/ui/SideBarMobile';
 import Logo from '@/shared/ui/logo';
 import { getServerUser } from '@shared/getServerUser';
+import { AddPost } from '@/features/post/add-post';
 
 type Props = {
     className?: string;
@@ -18,7 +17,7 @@ const HomeHeader = async ({ className }: Props) => {
     return (
         <header
             className={cn(
-                'flex justify-between bg-[var(--background-second)] h-[88px] max-md:h-[200px] max-sm:h-[170px] border border-[--border] border-l-0 transition-colors duration-200',
+                'flex justify-between bg-[var(--background-second)] h-[var(--header-home-height)] border border-[--border] border-l-0 transition-colors duration-200 sticky w-full top-0 z-50',
                 className,
             )}
         >
@@ -34,16 +33,7 @@ const HomeHeader = async ({ className }: Props) => {
                         className={'w-full md:max-w-[400px]'}
                         inputClassName="h-12"
                     />
-                    {!!user && (
-                        <Button
-                            size={'lg'}
-                            className={
-                                'inline-flex gap-3 h-12 rounded-3xl font-bold text-white'
-                            }
-                        >
-                            Add new Post <Plus className="size-5" />
-                        </Button>
-                    )}
+                    {!!user && <AddPost />}
                 </div>
             </div>
 

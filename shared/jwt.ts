@@ -11,7 +11,7 @@ export async function signAccess(payload: Payload, exp = '7d') {
         .sign(SECRET);
 }
 
-export async function verifyAccess<T = any>(token: string) {
+export async function verifyAccess<Payload>(token: string) {
     const { payload } = await jose.jwtVerify(token, SECRET);
-    return payload as T;
+    return payload;
 }

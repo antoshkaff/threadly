@@ -12,15 +12,16 @@ const Auth = () => {
     return null;
 };
 
-const Providers = ({ children }: { children: ReactNode }) => {
-    const queryClient = new QueryClient();
+const queryClient = new QueryClient();
 
+const Providers = ({ children }: { children: ReactNode }) => {
     return (
         <QueryClientProvider client={queryClient}>
             <ThemeProvider
                 enableSystem
                 defaultTheme={'system'}
                 attribute={'class'}
+                disableTransitionOnChange
             >
                 {children}
                 <Auth />
