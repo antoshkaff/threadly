@@ -4,39 +4,24 @@ import { Navigation } from '@/features/navigation';
 import { Search } from '@/features/search';
 import { UserCardInline } from '@/entities/user';
 import { Button } from '@/shared/ui/button';
-import { getServerUser } from '@shared/getServerUser';
-import Link from 'next/link';
-import { ROUTES } from '@/shared/config/routes.config';
-import { LogOutButton } from '@/features/auth';
+import { LogOut } from 'lucide-react';
 
 type Props = {
     className?: string;
 };
 
-const SideBarContent = async ({ className }: Props) => {
-    const user = await getServerUser();
-
+const SideBarContent = ({ className }: Props) => {
     return (
         <div className="flex flex-col gap-8 h-full">
             <Logo />
             <Search iconPosition={'start'} placeholder={'Search...'} />
             <Navigation />
-            {!!user ? (
-                <div className="flex justify-between gap-3 mt-auto">
-                    <UserCardInline user={user} />
-                    <LogOutButton />
-                </div>
-            ) : (
-                <div className="mt-auto">
-                    <Button
-                        className="font-medium rounded-2xl w-full"
-                        size={'lg'}
-                        asChild
-                    >
-                        <Link href={ROUTES.SIGN_IN}>Sign in</Link>
-                    </Button>
-                </div>
-            )}
+            <div className="flex justify-between gap-3 mt-auto">
+                <UserCardInline />
+                <Button variant="ghost" size={'icon-lg'}>
+                    <LogOut className="size-5" />
+                </Button>
+            </div>
         </div>
     );
 };
