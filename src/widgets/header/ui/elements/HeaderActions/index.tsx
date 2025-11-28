@@ -1,21 +1,15 @@
 import React from 'react';
 import { UserAvatar } from '@/entities/user';
 
+import { NotificationMenu } from '@/features/notification-menu';
 import { ToggleThemeButton } from '@/features/toggle-theme';
 import { cn } from '@/shared/lib';
-
-import { getServerUser } from '@shared/getServerUser';
-import { Button } from '@/shared/ui/button';
-import { ROUTES } from '@/shared/config/routes.config';
-import Link from 'next/link';
 
 type Props = {
     className?: string;
 };
 
-const HeaderActions = async ({ className }: Props) => {
-    const user = await getServerUser();
-
+const HeaderActions = ({ className }: Props) => {
     return (
         <div
             className={cn(
@@ -23,16 +17,8 @@ const HeaderActions = async ({ className }: Props) => {
                 className,
             )}
         >
-            {!!user ? (
-                <Link href={ROUTES.PROFILE(user.username)}>
-                    <UserAvatar size={'lg'} link={user.avatarUrl} />
-                </Link>
-            ) : (
-                <Button className="font-medium rounded-2xl" size={'lg'} asChild>
-                    <Link href={ROUTES.SIGN_IN}>Sign in</Link>
-                </Button>
-            )}
-
+            <UserAvatar size={'lg'} />
+            <NotificationMenu />
             <ToggleThemeButton />
         </div>
     );
