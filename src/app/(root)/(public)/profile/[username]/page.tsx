@@ -5,22 +5,19 @@ import { API } from '@/shared/constants/api';
 import { ProfilePage } from '@/pages_/profile';
 import { Metadata } from 'next';
 
-type PageParams = {
-    username: string;
-};
-
 export async function generateMetadata({
     params,
 }: {
-    params: PageParams;
+    params: Promise<Params>;
 }): Promise<Metadata> {
-    const rawUsername = params.username;
-    const username = rawUsername.replace(/^@/, '');
+    const username = (await params).username;
 
     let profile: PublicProfile | null = null;
 
     try {
-        profile = await baseFetch<PublicProfile>(API.GET_PROFILE(username));
+        profile = await baseFetch<PublicProfile>(
+            API.GET_PROFILE(username as string),
+        );
     } catch {
         profile = null;
     }

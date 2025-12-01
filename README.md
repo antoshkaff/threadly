@@ -87,6 +87,6 @@ It is built with **Next.js App Router**, **Prisma/PostgreSQL**, **JWT auth with 
 
 ### 🚀 Live Demo
 
-[**🔗 Click here to view the live demo**]()
+[**🔗 Click here to view the live demo**](https://threadly-ten.vercel.app)
 
 ---
