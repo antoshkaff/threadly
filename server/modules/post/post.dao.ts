@@ -1,6 +1,6 @@
 import { prisma } from '@server/shared/prisma';
 import { PublicPost } from '@shared/types/post';
-import { Post, User } from '@server/generated/prisma/client';
+import { Post, User } from '@prisma/client';
 
 export const PostDAO = {
     findById(id: string) {
