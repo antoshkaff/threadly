@@ -1,10 +1,10 @@
-import { FeedPage } from '@/pages-ui/feed';
+import { FriendsPage } from '@/pages-ui/friends';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Feed',
+    title: 'Friends',
 };
 
 export default function Page() {
-    return <FeedPage />;
+    return <FriendsPage />;
 }

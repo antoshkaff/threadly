@@ -7,18 +7,21 @@ export const NAV_CONFIG: NavItem[] = [
         label: 'Home',
         icon: House,
         href: ROUTES.HOME,
-        isPrivate: false,
     },
     {
         label: 'Feed',
         icon: Newspaper,
         href: ROUTES.FEED,
-        isPrivate: false,
+    },
+    {
+        label: 'Friends',
+        icon: Users,
+        href: ROUTES.FRIENDS,
     },
     {
         label: 'Profile',
         icon: User,
-        href: (username: string) => ROUTES.PROFILE(username),
+        href: (username) => ROUTES.PROFILE(username),
         isPrivate: true,
     },
 ];
