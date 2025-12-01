@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Threadly — Twitter-inspired Social Network (Next.js + FSD)
 
-## Getting Started
+Threadly is a Twitter-inspired social app for short posts, threaded conversations and following people you care about.  
+It is built with **Next.js App Router**, **Prisma/PostgreSQL**, **JWT auth with cookies**, and a **Feature-Sliced Design (FSD)** frontend architecture.
 
-First, run the development server:
+> Live stack highlights: Next.js App Router • TypeScript • Prisma • PostgreSQL • React Query • Tailwind CSS • shadcn/Radix UI • Framer Motion • Zustand • Zod • Vercel Blob • FSD
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Twitter-style feed**
+    - Two main feeds: **For You** and **Following** (tabs)
+    - Infinite scrolling for posts (`PostInfinityList`)
+    - Sticky header + sticky tabs for comfortable scrolling
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Profiles & following**
+    - Public profile pages: `@username`, avatar, bio, stats
+    - Follow / unfollow logic and a “Following” feed based on subscriptions
+    - SEO-friendly profile metadata (`generateMetadata` with dynamic titles)
 
-## Learn More
+- **Threads & replies**
+    - Create posts, reply to posts, read conversations as threads
+    - Separation between posts and comments in API and UI
+    - Clean, mobile-first layout for reading long chains
 
-To learn more about Next.js, take a look at the following resources:
+- **Search with filters**
+    - Global search page with:
+        - query in URL (`useSearchParams`)
+        - tabs for **All / Posts / Comments / Users**
+        - filter checkboxes for post/comment/user types
+    - Debounced search and loading skeletons for smooth UX
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Auth & user session**
+    - Login / register with **JWT** stored in HttpOnly cookies
+    - Server helpers to read user from cookies on the server
+    - Guarded areas of the app (feed, profile actions, etc.)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Modern UI & UX**
+    - Tailwind + shadcn-style components (Tabs, Checkbox, Skeleton, Empty states, etc.)
+    - Framer Motion animations for page transitions, tab content, lists
+    - Dark / light theme toggle via `next-themes`
+    - Responsive layouts for desktop sidebar + mobile sidebar/header
 
-## Deploy on Vercel
+- **File storage & media**
+    - Support for avatar / media via **Vercel Blob** (public blob URLs)
+    - Ready to extend with image previews and richer media
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🧱 Tech Stack
+
+- **Framework**
+    - Next.js (App Router)
+    - React + TypeScript
+
+- **Backend / Data**
+    - Prisma ORM
+    - PostgreSQL
+    - Next.js Route Handlers / server components
+
+- **Auth**
+    - JWT (via `jose`)
+    - HttpOnly cookies
+    - Server utilities to read and validate user
+
+- **Client Data & State**
+    - @tanstack/react-query for data fetching & caching
+    - Zustand for client state (user, search, filters, etc.)
+    - `react-use` for hooks like debounced search
+
+- **UI & Styling**
+    - Tailwind CSS
+    - shadcn / Radix UI primitives (Tabs, Checkbox, etc.)
+    - Framer Motion for animations
+    - Custom design system in `/shared/ui`
+
+- **Validation & Utils**
+    - Zod for schema validation
+    - `clsx`, `tailwind-merge` for class handling
+
+- **Storage & Hosting**
+    - Vercel (preview & production)
+    - Vercel Blob for file storage
+
+---
+
+### 🚀 Live Demo
+
+[**🔗 Click here to view the live demo**]()
+
+---

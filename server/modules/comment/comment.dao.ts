@@ -1,6 +1,6 @@
 import { prisma } from '@server/shared/prisma';
-import { User, Comment } from '@server/generated/prisma/client';
 import { PublicComment } from '@shared/types/comment';
+import { User, Comment } from '@prisma/client';
 
 export const CommentDAO = {
     findById(id: string) {

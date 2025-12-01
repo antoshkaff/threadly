@@ -2,10 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import SearchFilters from '@/features/search/ui/SearchFilters';
-import SearchForm from '@/features/search/ui/SearchForm';
 import { useSearch } from '@/features/search/api/hooks';
 import { useSearchStore } from '@/features/search/model/store';
-import { useDebounce, useLocation } from 'react-use';
+import { useDebounce } from 'react-use';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { SEARCH_TABS } from '@/features/search/model/constants';
 import { SEARCH_TABS_CONFIG } from '@/features/search/model/config';
@@ -71,13 +70,10 @@ const SearchPage = () => {
     const [activeTab, setActiveTab] = useState(SEARCH_TABS.ALL);
 
     return (
-        <section className="grid grid-cols-[1fr_260px] min-h-screen">
+        <section className="grid grid-cols-[1fr_260px] min-h-screen max-lg:grid-cols-[1fr_160px] max-md:grid-cols-1">
             <section>
-                <div className="p-3 bg-[var(--background-second)] border border-[--border] border-l-0 border-r-0">
-                    <SearchForm inputClassName="h-12" />
-                </div>
                 <Tabs value={activeTab} onValueChange={setActiveTab}>
-                    <TabsList className="h-fit w-full sticky top-0">
+                    <TabsList className="h-fit w-full">
                         {SEARCH_TABS_CONFIG.map((tab) => (
                             <TabsTrigger
                                 key={tab.value}

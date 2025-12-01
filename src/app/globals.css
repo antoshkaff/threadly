@@ -153,6 +153,6 @@
 
 @media (max-width: 640px) {
     :root {
-        --header-home-height: 170px;
+        --header-home-height: fit-content;
     }
 }

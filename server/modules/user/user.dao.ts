@@ -1,5 +1,5 @@
 import { prisma } from '@server/shared/prisma';
-import { User } from '@server/generated/prisma/client';
+import { User } from '@prisma/client';
 
 export class UserDAO {
     static findByEmail(email: string) {

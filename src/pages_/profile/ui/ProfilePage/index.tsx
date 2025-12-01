@@ -20,7 +20,6 @@ const ProfilePage = ({ username }: Props) => {
 
     return (
         <section>
-            <UserCard profile={data} user={user} className="sticky top-0" />
             <div className="p-4 flex flex-col gap-4">
                 {user?.id === data.id && (
                     <div className="flex flex-col border border-[--border] rounded-3xl bg-[var(--background-second)] p-6">
@@ -39,6 +38,7 @@ const ProfilePage = ({ username }: Props) => {
 
                 <PostInfinityList username={username} />
             </div>
+            <UserCard profile={data} user={user} className="sticky bottom-0" />
         </section>
     );
 };
