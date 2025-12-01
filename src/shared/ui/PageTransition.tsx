@@ -18,6 +18,7 @@ const PageTransition = ({ children }: { children: ReactNode }) => {
                 animate={{ opacity: 1 }}
                 key={pathname}
                 transition={{ duration: 0.2 }}
+                className={'h-full'}
             >
                 {children}
             </motion.div>

@@ -19,7 +19,7 @@ const ProfilePage = ({ username }: Props) => {
     if (!data) return;
 
     return (
-        <section>
+        <section className="flex flex-col">
             <div className="p-4 flex flex-col gap-4">
                 {user?.id === data.id && (
                     <div className="flex flex-col border border-[--border] rounded-3xl bg-[var(--background-second)] p-6">

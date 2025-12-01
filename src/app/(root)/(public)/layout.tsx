@@ -8,7 +8,9 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
             <Sidebar className={'row-span-full col-start-1 max-lg:hidden'} />
             <PageTransition>
                 <section
-                    className={'col-start-2 transition-colors duration-200'}
+                    className={
+                        'col-start-2 transition-colors duration-200 h-full'
+                    }
                 >
                     {children}
                 </section>
