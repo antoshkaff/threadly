@@ -8,12 +8,14 @@ import { getServerUser } from '@shared/getServerUser';
 import Link from 'next/link';
 import { ROUTES } from '@/shared/config/routes.config';
 import { LogOutButton } from '@/features/auth';
+import { ToggleThemeButton } from '@/features/toggle-theme';
 
 type Props = {
     className?: string;
+    isMobile?: boolean;
 };
 
-const SideBarContent = async ({ className }: Props) => {
+const SideBarContent = async ({ className, isMobile = false }: Props) => {
     const user = await getServerUser();
 
     return (
@@ -27,7 +29,7 @@ const SideBarContent = async ({ className }: Props) => {
                     <LogOutButton />
                 </div>
             ) : (
-                <div className="mt-auto">
+                <div className="flex flex-col items-center gap-3 mt-auto">
                     <Button
                         className="font-medium rounded-2xl w-full"
                         size={'lg'}
@@ -35,6 +37,7 @@ const SideBarContent = async ({ className }: Props) => {
                     >
                         <Link href={ROUTES.SIGN_IN}>Sign in</Link>
                     </Button>
+                    <ToggleThemeButton />
                 </div>
             )}
         </div>

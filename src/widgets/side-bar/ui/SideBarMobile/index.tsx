@@ -27,7 +27,7 @@ const SideBarMobile = () => {
                     <SheetTitle>Navigation</SheetTitle>
                 </SheetHeader>
                 <div className="py-8 px-8 h-full">
-                    <SideBarContent />
+                    <SideBarContent isMobile={true} />
                 </div>
             </SheetContent>
         </Sheet>

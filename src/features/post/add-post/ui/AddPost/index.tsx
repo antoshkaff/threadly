@@ -20,7 +20,7 @@ const AddPost = () => {
                 <Button
                     size={'lg'}
                     className={
-                        'inline-flex gap-3 h-12 rounded-3xl font-bold text-white'
+                        'inline-flex gap-3 h-12 rounded-3xl font-bold text-white max-sm:h-10'
                     }
                 >
                     Add new Post <Plus className="size-5" />

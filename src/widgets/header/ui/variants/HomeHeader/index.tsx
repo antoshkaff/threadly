@@ -21,17 +21,17 @@ const HomeHeader = async ({ className }: Props) => {
                 className,
             )}
         >
-            <div className="grid h-full w-full max-md:grid-rows-[auto_1fr]">
+            <div className="grid h-full w-full max-md:grid-rows-[auto_1fr] max-sm:grid-rows-[auto_1fr]">
                 <div className="flex items-center gap-3 justify-between py-3 px-8 md:hidden max-md:border-b max-md:border-[--border]">
                     <SideBarMobile />
                     <Logo className="md:hidden" />
                 </div>
-                <div className="grid grid-cols-[1fr_auto] items-center gap-3 px-8 max-md:grid-cols-1 max-md:content-center max-md:gap-4">
+                <div className="grid grid-cols-[1fr_auto] items-center gap-3 px-8 max-md:grid-cols-1 max-md:content-center max-md:gap-4 py-2">
                     <Search
                         iconPosition={'end'}
                         placeholder={'Search for friends, groups, pages'}
-                        className={'w-full md:max-w-[400px]'}
-                        inputClassName="h-12"
+                        className={'w-full md:max-w-[400px] max-sm:text-sm'}
+                        inputClassName="h-12 max-sm:text-sm max-sm:h-10"
                     />
                     {!!user && <AddPost />}
                 </div>

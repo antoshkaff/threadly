@@ -1,7 +1,13 @@
 const getBaseUrl = () => {
-    return process.env.NEXT_PUBLIC_APP_URL
-        ? `${process.env.NEXT_PUBLIC_APP_URL}/api`
-        : 'http://localhost:3000/api';
+    if (typeof window !== 'undefined') {
+        return '/api';
+    }
+
+    if (process.env.NEXT_PUBLIC_APP_URL) {
+        return `${process.env.NEXT_PUBLIC_APP_URL}/api`;
+    }
+
+    return 'http://localhost:3000/api';
 };
 
 export async function baseFetch<T>(url: string, init?: RequestInit) {
