@@ -26,7 +26,7 @@ const SideBarMobile = () => {
                 <SheetHeader className="visually-hidden">
                     <SheetTitle>Navigation</SheetTitle>
                 </SheetHeader>
-                <div className="py-8 px-8 h-full">
+                <div className="pt-8 px-8 pb-5 h-full">
                     <SideBarContent isMobile={true} />
                 </div>
             </SheetContent>

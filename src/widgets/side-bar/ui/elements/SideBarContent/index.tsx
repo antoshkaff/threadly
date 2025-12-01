@@ -24,9 +24,14 @@ const SideBarContent = async ({ className, isMobile = false }: Props) => {
             <Search iconPosition={'start'} placeholder={'Search...'} />
             <Navigation />
             {!!user ? (
-                <div className="flex justify-between gap-3 mt-auto">
-                    <UserCardInline user={user} />
-                    <LogOutButton />
+                <div className="flex flex-col mt-auto gap-3">
+                    <div className="flex justify-between gap-3">
+                        <UserCardInline user={user} />
+                        <LogOutButton />
+                    </div>
+                    <div className="mx-auto">
+                        <ToggleThemeButton />
+                    </div>
                 </div>
             ) : (
                 <div className="flex flex-col items-center gap-3 mt-auto">

@@ -19,8 +19,8 @@ const ProfilePage = ({ username }: Props) => {
     if (!data) return;
 
     return (
-        <section className="flex flex-col">
-            <div className="p-4 flex flex-col gap-4">
+        <section className="flex flex-col min-h-[calc(100vh-62px)]">
+            <div className="p-4 flex flex-col flex-1 gap-4">
                 {user?.id === data.id && (
                     <div className="flex flex-col border border-[--border] rounded-3xl bg-[var(--background-second)] p-6">
                         <AddPostForm />

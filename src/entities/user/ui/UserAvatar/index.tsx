@@ -32,7 +32,7 @@ const UserAvatar = ({ className, link, size }: Props) => {
                 height={56}
                 width={56}
                 alt={'Profile picture'}
-                className={'object-contain'}
+                className={'object-cover'}
             />
         </div>
     );

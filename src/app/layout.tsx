@@ -58,7 +58,7 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body
-                className={`${plus_Jakarta_Sans.variable} ${plus_Jakarta_Sans.className}  antialiased transition-colors duration-200 `}
+                className={`${plus_Jakarta_Sans.variable} ${plus_Jakarta_Sans.className}  antialiased transition-colors duration-200`}
             >
                 <Providers>
                     {children}
@@ -67,7 +67,8 @@ export default function RootLayout({
                             classNames: {
                                 error: '!border !border-red-200 !bg-red-200 !text-black',
                                 success:
-                                    '!border !border-green-200 !bg-green-200 !text-black',
+                                    '!border !border-green-300 !bg-green-300 !text-black',
+                                description: '!text-muted-foreground',
                             },
                         }}
                     />
