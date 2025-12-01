@@ -2,10 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import SearchFilters from '@/features/search/ui/SearchFilters';
-import SearchForm from '@/features/search/ui/SearchForm';
 import { useSearch } from '@/features/search/api/hooks';
 import { useSearchStore } from '@/features/search/model/store';
-import { useDebounce, useLocation } from 'react-use';
+import { useDebounce } from 'react-use';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { SEARCH_TABS } from '@/features/search/model/constants';
 import { SEARCH_TABS_CONFIG } from '@/features/search/model/config';
@@ -22,7 +21,6 @@ import {
 import { Search } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
-import SideBarMobile from '@/widgets/side-bar/ui/SideBarMobile';
 
 const isEmptyForTab = (tabValue: string, data?: SearchResponse) => {
     if (!data) return true;
