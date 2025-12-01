@@ -4,7 +4,7 @@ import PageTransition from '@/shared/ui/PageTransition';
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
     return (
-        <main className="min-h-screen grid grid-cols-[310px_1fr] max-xl:grid-cols-[200px_1fr] max-lg:grid-cols-1">
+        <main className="min-h-screen grid grid-cols-[310px_1fr] max-xl:grid-cols-[250px_1fr] max-lg:grid-cols-1">
             <Sidebar className={'row-span-full col-start-1 max-lg:hidden'} />
             <PageTransition>
                 <section

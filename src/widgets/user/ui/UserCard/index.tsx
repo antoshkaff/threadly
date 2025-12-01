@@ -45,7 +45,9 @@ const UserCard = ({ profile, user, className }: Props) => {
                 />
             )}
 
-            {profile.bio && <span className="text-sm">{profile.bio}</span>}
+            {profile.bio && (
+                <span className="text-sm col-span-full">{profile.bio}</span>
+            )}
         </article>
     );
 };

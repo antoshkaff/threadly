@@ -6,7 +6,7 @@ const FeedPage = () => {
     return (
         <section className="pb-3">
             <Tabs defaultValue="for-you">
-                <TabsList className="h-fit w-full sticky top-0">
+                <TabsList className="h-fit w-full sticky top-[62px]">
                     <TabsTrigger
                         value={'for-you'}
                         className="py-2 w-full font-semibold"

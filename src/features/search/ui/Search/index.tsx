@@ -1,19 +1,11 @@
 'use client';
 
-import React, {
-    ChangeEvent,
-    FormEvent,
-    InputHTMLAttributes,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import React, { FormEvent, InputHTMLAttributes, useRef } from 'react';
 import { Input } from '@/shared/ui/input';
 import { Search as SearchIcon } from 'lucide-react';
 import { useId } from 'react';
 import { cn } from '@/shared/lib';
-import { Button } from '@/shared/ui/button';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/shared/config/routes.config';
 
 type IconPosition = 'start' | 'end';
