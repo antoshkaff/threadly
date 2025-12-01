@@ -23,7 +23,10 @@ export async function POST(req: NextRequest) {
 
         const post = await PostService.share(userId!, id);
 
-        const url = new URL(`/post/${id}`, APP_URL).toString();
+        const url = new URL(
+            `/post/${id}`,
+            process.env.NEXT_PUBLIC_APP_URL,
+        ).toString();
 
         return NextResponse.json({ post, url }, { status: 200 });
     } catch (e) {

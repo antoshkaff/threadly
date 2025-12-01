@@ -27,7 +27,9 @@ export async function generateMetadata({
         profile?.bio ||
         `View posts, replies and activity from @${username} on Threadly.`;
     const title = `${displayName} (@${username}) • Threadly`;
-    const avatarUrl = profile?.avatarUrl || process.env.OG_IMAGE!;
+    const avatarUrl = profile?.avatarUrl
+        ? profile.avatarUrl
+        : process.env.OG_IMAGE!;
 
     return {
         title,
