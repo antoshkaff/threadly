@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 import { useIntersection } from 'react-use';
 
 import { PostSkeleton, useInfinityPosts } from '@/entities/post';
-import { useUser } from '@/entities/user/model/store';
+import { useCurrentUser } from '@/entities/user/api/hooks';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/shared/ui/empty';
 import { PostCard } from '@/widgets/post';
 
@@ -16,11 +16,11 @@ type Props = {
   onlyFollowing?: boolean;
 };
 const PostInfinityList = ({ username, onlyFollowing }: Props) => {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isPending } =
+  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, isLoading, isPending } =
     useInfinityPosts({ username, onlyFollowing });
 
   const items = data?.pages.flatMap((page) => page.items);
-  const user = useUser((state) => state.user);
+  const user = useCurrentUser();
 
   const intersectionRef = useRef<HTMLDivElement | null>(null);
   const intersection = useIntersection(intersectionRef as RefObject<HTMLElement>, {
@@ -33,16 +33,16 @@ const PostInfinityList = ({ username, onlyFollowing }: Props) => {
     if (!intersection?.isIntersecting) return;
     if (!data || isLoading || isPending) return;
     if (!hasNextPage) return;
-    if (isFetchingNextPage) return;
+    if (isFetching) return;
 
-    fetchNextPage();
+    fetchNextPage({ cancelRefetch: false });
   }, [
     intersection?.isIntersecting,
     data,
     hasNextPage,
     isLoading,
     isPending,
-    isFetchingNextPage,
+    isFetching,
     fetchNextPage,
   ]);
 

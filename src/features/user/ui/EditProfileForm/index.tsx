@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import { useEditUserMutation } from '@/entities/user';
-import { useUser } from '@/entities/user/model/store';
 import { uploadImages } from '@/shared/api/api';
 import { zodValidate } from '@/shared/lib/utils/zodValidate';
 import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/shared/ui/field';
@@ -22,8 +21,7 @@ type Props = {
   user: PublicUser;
 };
 const EditProfileForm = ({ user }: Props) => {
-  const { mutateAsync } = useEditUserMutation(user);
-  const setUser = useUser((s) => s.setUser);
+  const { mutateAsync } = useEditUserMutation();
 
   const form = useFormik({
     initialValues: {
@@ -40,10 +38,7 @@ const EditProfileForm = ({ user }: Props) => {
           const { urls } = res;
 
           const payload = { ...values, avatarUrl: urls[0] };
-          const user = await mutateAsync(payload);
-
-          console.log(user);
-          setUser(user);
+          await mutateAsync(payload);
         })();
 
         toast.promise(op, {

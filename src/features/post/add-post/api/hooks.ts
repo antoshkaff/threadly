@@ -2,48 +2,21 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { POST_KEYS } from '@/entities/post/api/keys';
+import { postKeys, postMutationKeys } from '@/entities/post/api/keys';
 import { createPost } from '@/features/post/add-post/api/api';
-
-import type { PublicPost } from '@shared/types/post';
-import type { InfiniteData } from '@tanstack/query-core';
-
-type PostsPage = {
-  items: PublicPost[];
-  nextCursor: string | null;
-};
+import { searchKeys } from '@/features/search/api/keys';
 
 export const useCreatePostMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: POST_KEYS.create,
+    mutationKey: postMutationKeys.create,
     mutationFn: createPost,
-    onSuccess: (data) => {
-      const newPost = data.post;
-      queryClient.setQueriesData<InfiniteData<PostsPage>>(
-        { queryKey: POST_KEYS.postList() },
-        (oldPosts) => {
-          if (!oldPosts) {
-            return {
-              pageParams: [null],
-              pages: [
-                {
-                  items: [newPost],
-                  nextCursor: null,
-                },
-              ],
-            };
-          }
-
-          return {
-            ...oldPosts,
-            pages: oldPosts.pages.map((page, index) =>
-              index === 0 ? { ...page, items: [newPost, ...page.items] } : page,
-            ),
-          };
-        },
-      );
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: postKeys.lists }),
+        queryClient.invalidateQueries({ queryKey: searchKeys.all }),
+      ]);
     },
   });
 };

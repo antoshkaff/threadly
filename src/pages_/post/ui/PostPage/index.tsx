@@ -2,23 +2,23 @@
 
 import React from 'react';
 
-import { useUser } from '@/entities/user/model/store';
+import type { CommentsPage } from '@/entities/comment/api/hooks';
+import { useCurrentUser } from '@/entities/user/api/hooks';
 import { AddCommentForm } from '@/features/comment';
 import { usePostDetails } from '@/pages_/post/api/hooks';
 import { CommentsInfinityList } from '@/widgets/comment';
 import { PostCard } from '@/widgets/post';
 
-import type { PublicComment } from '@shared/types/comment';
 import type { PublicPost } from '@shared/types/post';
 
 type Props = {
   postId: string;
   initialPost: { post: PublicPost };
-  initialComments: PublicComment[];
+  initialComments: CommentsPage;
 };
 
 const PostPage = ({ postId, initialPost, initialComments }: Props) => {
-  const user = useUser((s) => s.user);
+  const user = useCurrentUser();
   const { data } = usePostDetails({
     postId,
     initialPost,

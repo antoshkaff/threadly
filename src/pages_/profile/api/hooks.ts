@@ -1,13 +1,13 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
+import { userKeys } from '@/entities/user/api/keys';
 import { getProfile } from '@/pages_/profile/api/api';
-import { PROFILE_KEYS } from '@/pages_/profile/api/keys';
 
 export const useProfile = (username: string) => {
   return useQuery(
     queryOptions({
-      queryKey: PROFILE_KEYS.PROFILE(username),
-      queryFn: () => getProfile(username),
+      queryKey: userKeys.profile(username),
+      queryFn: ({ signal }) => getProfile(username, signal),
     }),
   );
 };

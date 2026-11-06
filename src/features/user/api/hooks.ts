@@ -3,23 +3,21 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
+import { postKeys } from '@/entities/post/api/keys';
+import { userKeys, userMutationKeys } from '@/entities/user/api/keys';
 import { toggleFollow } from '@/features/user/api/api';
-import { USER_FEATURES_KEYS } from '@/features/user/api/keys';
-import { PROFILE_KEYS } from '@/pages_/profile/api/keys';
-
-import type { PublicProfile } from '@shared/types/user';
 
 export const useFollowMutation = (username: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: USER_FEATURES_KEYS.FOLLOW(username),
-    mutationFn: toggleFollow,
-    onSuccess: (data) => {
-      queryClient.setQueryData(PROFILE_KEYS.PROFILE(username), (old: PublicProfile) => ({
-        ...old,
-        subscribersCount: data.followed ? old.subscribersCount + 1 : old.subscribersCount - 1,
-      }));
+    mutationKey: userMutationKeys.follow,
+    mutationFn: () => toggleFollow(username),
+    onSuccess: async (data) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: userKeys.all }),
+        queryClient.invalidateQueries({ queryKey: postKeys.lists }),
+      ]);
 
       if (data.followed) {
         toast.success(`You are now following @${username}`, {
@@ -31,11 +29,9 @@ export const useFollowMutation = (username: string) => {
         });
       }
     },
-    onError: (err: { message?: string; response?: { data?: { message?: string } } }) => {
-      const msg = err?.message || err?.response?.data?.message || 'Please try again in a moment.';
-
+    onError: (err: { message?: string }) => {
       toast.error('Follow update failed', {
-        description: msg,
+        description: err.message || 'Please try again in a moment.',
       });
     },
   });

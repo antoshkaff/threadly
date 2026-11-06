@@ -1,6 +1,8 @@
+import { usePathname, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 import { useDeletePostMutation } from '@/entities/post';
+import { ROUTES } from '@/shared/config/routes.config';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -22,10 +24,13 @@ type Props = {
 };
 const PostDeleteDialog = ({ isOpen, onOpenChange, postId }: Props) => {
   const { mutateAsync, isPending } = useDeletePostMutation();
+  const pathname = usePathname();
+  const router = useRouter();
 
   const handleSubmit = async () => {
     try {
       await mutateAsync(postId);
+      if (pathname === ROUTES.POST_DETAILS(postId)) router.replace(ROUTES.HOME);
       toast.success('Post deleted', {
         description: 'The post has been successfully removed.',
       });

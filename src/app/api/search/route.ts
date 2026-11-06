@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { AppError } from '@server/modules/error/AppError';
 import { SearchService } from '@server/modules/search/search.service';
+import { getServerUser } from '@shared/getServerUser';
 
 import type { NextRequest } from 'next/server';
 
@@ -34,7 +35,8 @@ export async function GET(req: NextRequest) {
       types = set.size ? Array.from(set) : allTypes;
     }
 
-    const result = await SearchService.search({ q, types, limit });
+    const user = await getServerUser();
+    const result = await SearchService.search({ q, types, limit, viewerId: user?.id });
 
     return NextResponse.json(result, { status: 200 });
   } catch (e) {

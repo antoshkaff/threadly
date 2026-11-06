@@ -36,7 +36,7 @@ const UserCard = ({ profile, user, className }: Props) => {
       ) : (
         <FollowButton
           username={profile.username}
-          isFollowedInitial={profile.isFollowed}
+          isFollowed={profile.isFollowed}
           className="w-1/2 justify-self-end"
         />
       )}

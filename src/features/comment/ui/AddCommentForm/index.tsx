@@ -6,7 +6,7 @@ import React from 'react';
 import { toast } from 'sonner';
 
 import { UserAvatar } from '@/entities/user';
-import { useUser } from '@/entities/user/model/store';
+import { useCurrentUser } from '@/entities/user/api/hooks';
 import { useAddCommentMutation } from '@/features/comment/api/hooks';
 import { cn } from '@/shared/lib';
 import { Button } from '@/shared/ui/button';
@@ -19,7 +19,7 @@ type Props = {
 };
 
 const AddCommentForm = ({ postId, className }: Props) => {
-  const user = useUser((s) => s.user);
+  const user = useCurrentUser();
 
   const { mutateAsync, isPending } = useAddCommentMutation();
   const form = useFormik({

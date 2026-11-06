@@ -3,7 +3,7 @@
 import { Send } from 'lucide-react';
 import React from 'react';
 
-import { useUser } from '@/entities/user/model/store';
+import { useCurrentUser } from '@/entities/user/api/hooks';
 import AddPostForm, { FORM_ID } from '@/features/post/add-post/ui/AddPostForm';
 import { useProfile } from '@/pages_/profile/api/hooks';
 import { Button } from '@/shared/ui/button';
@@ -15,7 +15,7 @@ type Props = {
 };
 const ProfilePage = ({ username }: Props) => {
   const { data } = useProfile(username);
-  const user = useUser((s) => s.user);
+  const user = useCurrentUser();
   if (!data) return;
 
   return (
