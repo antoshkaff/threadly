@@ -1,18 +1,16 @@
 import { baseFetch } from '@/shared/api/baseFetch';
-import { PublicPost } from '@shared/types/post';
 import { API } from '@/shared/constants/api';
 
+import type { PublicPost } from '@shared/types/post';
+
 export const likePost = async (id: string) => {
-    return await baseFetch<PublicPost>(API.POST_LIKE(id), {
-        method: 'POST',
-    });
+  return await baseFetch<PublicPost>(API.POST_LIKE(id), {
+    method: 'POST',
+  });
 };
 
 export const sharePost = async (id: string) => {
-    return await baseFetch<{ post: PublicPost; url: string }>(
-        API.POST_SHARE(id),
-        {
-            method: 'POST',
-        },
-    );
+  return await baseFetch<{ post: PublicPost; url: string }>(API.POST_SHARE(id), {
+    method: 'POST',
+  });
 };

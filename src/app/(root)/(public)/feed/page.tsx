@@ -1,10 +1,11 @@
 import { FeedPage } from '@/pages_/feed';
-import { Metadata } from 'next';
+
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Feed',
+  title: 'Feed',
 };
 
 export default function Page() {
-    return <FeedPage />;
+  return <FeedPage />;
 }
