@@ -1,27 +1,26 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 
-import { useFollowMutation } from '@/features/user/api/hooks';
-import { useRequireAuth } from '@/shared/lib';
+import { useRequireAuth } from '@/entities/user';
 import { Button } from '@/shared/ui/button';
 import { Spinner } from '@/shared/ui/spinner';
 
+import { useFollowMutation } from '../../api/hooks';
+
 type Props = {
   username: string;
-  isFollowedInitial: boolean;
+  isFollowed: boolean;
   className?: string;
 };
-const FollowButton = ({ username, isFollowedInitial, className }: Props) => {
-  const { mutateAsync, isPending } = useFollowMutation(username);
-  const [isFollowed, setIsFollowed] = useState(isFollowedInitial);
+const FollowButton = ({ username, isFollowed, className }: Props) => {
+  const { mutate, isPending } = useFollowMutation(username);
   const { isAuth } = useRequireAuth();
 
-  const handleClick = async () => {
+  const handleClick = () => {
     if (!isAuth()) return;
 
-    const { followed } = await mutateAsync(username);
-    setIsFollowed(followed);
+    mutate();
   };
 
   return (

@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import React from 'react';
 
-import type { NavItem } from '@/features/navigation/model/nav.types';
 import { cn } from '@/shared/lib';
 
+import type { NavItem } from '../../model/nav.types';
 import type { LinkHTMLAttributes } from 'react';
 
 type Props = {

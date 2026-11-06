@@ -1,14 +1,14 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
-import { getSubscribers, getSubscriptions } from '@/widgets/user/api/api';
+import { userKeys } from '@/entities/user';
 
-import { USER_WIDGET_KEYS } from './keys';
+import { getSubscribers, getSubscriptions } from './api';
 
 export const useSubscribers = (username: string) => {
   return useQuery(
     queryOptions({
-      queryKey: USER_WIDGET_KEYS.subscribers(username),
-      queryFn: () => getSubscribers(username),
+      queryKey: userKeys.subscribers(username),
+      queryFn: ({ signal }) => getSubscribers(username, signal),
     }),
   );
 };
@@ -16,8 +16,8 @@ export const useSubscribers = (username: string) => {
 export const useSubscriptions = (username: string) => {
   return useQuery(
     queryOptions({
-      queryKey: USER_WIDGET_KEYS.subscriptions(username),
-      queryFn: () => getSubscriptions(username),
+      queryKey: userKeys.subscriptions(username),
+      queryFn: ({ signal }) => getSubscriptions(username, signal),
     }),
   );
 };

@@ -1,9 +1,9 @@
 import { UserAvatar } from '@/entities/user';
-import EditProfileModal from '@/features/user/ui/EditProfileModal';
-import FollowButton from '@/features/user/ui/FollowButton';
+import { EditProfileModal, FollowButton } from '@/features/user';
 import { cn } from '@/shared/lib';
-import SubscribersModal from '@/widgets/user/ui/SubscribersModal';
-import SubscriptionsModal from '@/widgets/user/ui/SubscriptionsModal';
+
+import SubscribersModal from '../SubscribersModal';
+import SubscriptionsModal from '../SubscriptionsModal';
 
 import type { PublicProfile, PublicUser } from '@shared/types/user';
 
@@ -36,7 +36,7 @@ const UserCard = ({ profile, user, className }: Props) => {
       ) : (
         <FollowButton
           username={profile.username}
-          isFollowedInitial={profile.isFollowed}
+          isFollowed={profile.isFollowed}
           className="w-1/2 justify-self-end"
         />
       )}

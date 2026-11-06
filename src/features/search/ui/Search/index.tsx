@@ -13,14 +13,14 @@ import type { FormEvent, InputHTMLAttributes } from 'react';
 type IconPosition = 'start' | 'end';
 
 type Props = {
-  className?: string;
-  inputClassName?: string;
   iconPosition: IconPosition;
   value?: string;
   redirect?: boolean;
+  className?: string;
+  inputClassName?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const Search = ({ iconPosition, className, inputClassName, redirect = true, ...props }: Props) => {
+const Search = ({ iconPosition, redirect = true, className, inputClassName, ...props }: Props) => {
   const id = useId();
   const router = useRouter();
 

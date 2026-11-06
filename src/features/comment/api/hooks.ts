@@ -1,94 +1,43 @@
+'use client';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { COMMENT_KEYS } from '@/entities/comment';
-import { POST_KEYS } from '@/entities/post/api/keys';
-import { addComment } from '@/features/comment/api/api';
+import { commentKeys, commentMutationKeys } from '@/entities/comment';
+import { postKeys } from '@/entities/post';
+import { searchKeys } from '@/entities/search';
 
-import type { PublicComment } from '@shared/types/comment';
-import type { PublicPost } from '@shared/types/post';
-import type { InfiniteData } from '@tanstack/query-core';
-
-type PostsPage = {
-  items: PublicPost[];
-  nextCursor: string | null;
-};
-
-type CommentsPage = {
-  items: PublicComment[];
-  nextCursor: string | null;
-};
+import { deleteComment, addComment } from './api';
 
 export const useAddCommentMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: COMMENT_KEYS.CREATE,
+    mutationKey: commentMutationKeys.create,
     mutationFn: addComment,
-    onSuccess: ({ comment }) => {
-      queryClient.setQueriesData<InfiniteData<PostsPage>>(
-        { queryKey: POST_KEYS.postList() },
-        (oldPages) => {
-          if (!oldPages) {
-            return;
-          }
+    onSuccess: async (_data, { postId }) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) }),
+        queryClient.invalidateQueries({ queryKey: postKeys.lists }),
+        queryClient.invalidateQueries({ queryKey: postKeys.detail(postId) }),
+        queryClient.invalidateQueries({ queryKey: searchKeys.all }),
+      ]);
+    },
+  });
+};
 
-          return {
-            ...oldPages,
-            pages: oldPages.pages.map((page) => ({
-              ...page,
-              items: page.items.map((post) =>
-                post.id === comment.postId
-                  ? {
-                      ...post,
-                      commentsCount: post.commentsCount + 1,
-                    }
-                  : post,
-              ),
-            })),
-          };
-        },
-      );
+export const useDeleteCommentMutation = () => {
+  const queryClient = useQueryClient();
 
-      queryClient.setQueryData<InfiniteData<CommentsPage>>(
-        COMMENT_KEYS.LIST(comment.postId),
-        (old) => {
-          if (!old) {
-            return {
-              pageParams: [null],
-              pages: [
-                {
-                  items: [comment],
-                  nextCursor: null,
-                },
-              ],
-            };
-          }
-
-          const [firstPage, ...restPages] = old.pages;
-
-          return {
-            pageParams: old.pageParams,
-            pages: [
-              {
-                ...firstPage,
-                items: [comment, ...firstPage.items],
-              },
-              ...restPages,
-            ],
-          };
-        },
-      );
-
-      queryClient.setQueryData<{ post: PublicPost }>(POST_KEYS.post(comment.postId), (prev) =>
-        prev
-          ? {
-              post: {
-                ...prev.post,
-                commentsCount: prev.post.commentsCount + 1,
-              },
-            }
-          : prev,
-      );
+  return useMutation({
+    mutationKey: commentMutationKeys.delete,
+    mutationFn: deleteComment,
+    onSuccess: async ({ postId }) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) }),
+        queryClient.invalidateQueries({ queryKey: postKeys.lists }),
+        queryClient.invalidateQueries({ queryKey: postKeys.detail(postId) }),
+        queryClient.invalidateQueries({ queryKey: searchKeys.all }),
+      ]);
     },
   });
 };

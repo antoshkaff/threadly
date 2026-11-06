@@ -1,6 +1,7 @@
 import { EllipsisVertical } from 'lucide-react';
 import React, { useState } from 'react';
 
+import { CommentDeleteDialog } from '@/features/comment';
 import { Button } from '@/shared/ui/button';
 import {
   DropdownMenu,
@@ -10,7 +11,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
-import CommentDeleteDialog from '@/widgets/comment/ui/CommentDeleteDialog';
 
 import type { PublicComment } from '@shared/types/comment';
 

@@ -8,7 +8,8 @@ import { cn } from '@/shared/lib';
 import { formatTime } from '@/shared/lib/utils/formatters';
 import BackButton from '@/shared/ui/BackButton';
 import PreviewableImage from '@/shared/ui/PreviewableImage';
-import PostMenu from '@/widgets/post/ui/PostMenu';
+
+import PostMenu from '../PostMenu';
 
 import type { PublicPost } from '@shared/types/post';
 import type { PublicUser } from '@shared/types/user';
@@ -58,10 +59,10 @@ const PostCard = ({ post, user, variant, className }: Props) => {
           </ul>
         </div>
         <PostActions
+          postId={post.id}
           likes={{ amount: post.likesCount, isLiked: post.isLiked }}
           comments={post.commentsCount}
           share={post.sharesCount}
-          postId={post.id}
         />
       </div>
       {!!user && variant !== 'detailed' && (

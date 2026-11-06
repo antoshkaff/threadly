@@ -9,3 +9,18 @@ export const addComment = async ({ postId, content }: { postId: string; content:
     body: JSON.stringify({ content: content }),
   });
 };
+
+export const deleteComment = async ({
+  postId,
+  commentId,
+}: {
+  postId: string;
+  commentId: string;
+}) => {
+  return await baseFetch<{ postId: string; commentId: string }>(
+    API.COMMENT_DELETE(postId, commentId),
+    {
+      method: 'DELETE',
+    },
+  );
+};

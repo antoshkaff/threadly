@@ -1,15 +1,9 @@
 'use client';
 
-import { useFormik } from 'formik';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
-import { useRegisterMutation } from '@/entities/user/api/hooks';
-import { useUser } from '@/entities/user/model/store';
 import { ROUTES } from '@/shared/config/routes.config';
-import { zodValidate } from '@/shared/lib/utils/zodValidate';
-import type { ApiError } from '@/shared/types/api.types';
 import { Button } from '@/shared/ui/button';
 import {
   Field,
@@ -22,45 +16,11 @@ import {
 import { Input } from '@/shared/ui/input';
 import { Spinner } from '@/shared/ui/spinner';
 import { Textarea } from '@/shared/ui/textarea';
-import { ERROR_CODES } from '@shared/constants';
-import { RegisterInput } from '@shared/contracts/user.dto';
+
+import { useRegisterForm } from '../../model/useRegisterForm';
 
 const RegisterForm = () => {
-  const router = useRouter();
-  const { mutateAsync, isPending } = useRegisterMutation();
-  const setUser = useUser((s) => s.setUser);
-
-  const form = useFormik({
-    initialValues: {
-      username: '',
-      email: '',
-      name: '',
-      bio: '',
-      password: '',
-      passwordRepeat: '',
-    },
-    validate: zodValidate(RegisterInput),
-    onSubmit: async (values) => {
-      form.setStatus(null);
-      try {
-        const { user } = await mutateAsync(values);
-        setUser(user);
-        router.replace(ROUTES.HOME);
-        router.refresh();
-      } catch (e: unknown) {
-        const error = e as ApiError;
-
-        if (Object.keys(ERROR_CODES).includes(error.code)) {
-          form.setStatus(error.message);
-          return;
-        }
-
-        form.setStatus('Something went wrong');
-      }
-    },
-    validateOnBlur: true,
-    validateOnChange: false,
-  });
+  const { form, isPending } = useRegisterForm();
 
   return (
     <AnimatePresence>

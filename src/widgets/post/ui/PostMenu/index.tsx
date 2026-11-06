@@ -3,6 +3,7 @@
 import { EllipsisVertical } from 'lucide-react';
 import React, { useState } from 'react';
 
+import { PostDeleteDialog } from '@/features/post/delete-post';
 import { Button } from '@/shared/ui/button';
 import {
   DropdownMenu,
@@ -12,7 +13,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
-import PostDeleteDialog from '@/widgets/post/ui/PostDeleteDialog';
 
 type Props = {
   postId: string;

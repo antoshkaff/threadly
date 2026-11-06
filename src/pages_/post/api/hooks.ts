@@ -1,7 +1,8 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
-import { POST_KEYS } from '@/entities/post/api/keys';
-import { getPost } from '@/pages_/post/api/api';
+import { postKeys } from '@/entities/post';
+
+import { getPost } from './api';
 
 import type { PublicPost } from '@shared/types/post';
 
@@ -14,11 +15,10 @@ export const usePostDetails = ({
 }) => {
   return useQuery(
     queryOptions({
-      queryKey: POST_KEYS.post(postId),
-      queryFn: () => getPost(postId),
+      queryKey: postKeys.detail(postId),
+      queryFn: ({ signal }) => getPost(postId, signal),
       initialData: initialPost,
       select: (data) => data.post,
-      refetchOnMount: false,
     }),
   );
 };

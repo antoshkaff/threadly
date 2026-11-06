@@ -1,6 +1,6 @@
 import React from 'react';
 
-import HomeHeader from '@/widgets/header/ui/variants/HomeHeader';
+import { HomeHeader } from '@/widgets/site-navigation';
 
 import type { ReactNode } from 'react';
 

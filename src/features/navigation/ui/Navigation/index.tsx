@@ -3,13 +3,14 @@
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
-import { useUser } from '@/entities/user/model/store';
-import { NAV_CONFIG } from '@/features/navigation/model/nav.config';
-import NavigationItem from '@/features/navigation/ui/NavigationItem';
+import { useCurrentUser } from '@/entities/user';
+
+import { NAV_CONFIG } from '../../model/nav.config';
+import NavigationItem from '../NavigationItem';
 
 const Navigation = () => {
   const pathname = usePathname();
-  const user = useUser((s) => s.user);
+  const user = useCurrentUser();
 
   return (
     <nav>

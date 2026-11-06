@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SearchHeader } from '@/widgets/header';
+import { SearchHeader } from '@/widgets/site-navigation';
 
 import type { ReactNode } from 'react';
 

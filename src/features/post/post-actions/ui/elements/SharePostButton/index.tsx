@@ -3,18 +3,19 @@
 import { Share2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { usePostShareMutation } from '@/features/post/post-actions/api/hooks';
-import { useRequireAuth } from '@/shared/lib';
+import { useRequireAuth } from '@/entities/user';
 import { formatNumberToCompact } from '@/shared/lib/utils/formatters';
 import { Button } from '@/shared/ui/button';
 import { Spinner } from '@/shared/ui/spinner';
+
+import { usePostShareMutation } from '../../../api/hooks';
 
 type Props = {
   postId: string;
   amount: number;
 };
 
-const SharePostButton = ({ amount, postId }: Props) => {
+const SharePostButton = ({ postId, amount }: Props) => {
   const { mutateAsync, isPending } = usePostShareMutation();
   const { isAuth } = useRequireAuth();
 

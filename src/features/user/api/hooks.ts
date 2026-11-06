@@ -1,25 +1,27 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-import { toggleFollow } from '@/features/user/api/api';
-import { USER_FEATURES_KEYS } from '@/features/user/api/keys';
-import { PROFILE_KEYS } from '@/pages_/profile/api/keys';
+import { commentKeys } from '@/entities/comment';
+import { postKeys } from '@/entities/post';
+import { searchKeys } from '@/entities/search';
+import { userKeys, userMutationKeys } from '@/entities/user';
 
-import type { PublicProfile } from '@shared/types/user';
+import { editUser, toggleFollow } from './api';
 
 export const useFollowMutation = (username: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: USER_FEATURES_KEYS.FOLLOW(username),
-    mutationFn: toggleFollow,
-    onSuccess: (data) => {
-      queryClient.setQueryData(PROFILE_KEYS.PROFILE(username), (old: PublicProfile) => ({
-        ...old,
-        subscribersCount: data.followed ? old.subscribersCount + 1 : old.subscribersCount - 1,
-      }));
+    mutationKey: userMutationKeys.follow,
+    mutationFn: () => toggleFollow(username),
+    onSuccess: async (data) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: userKeys.all }),
+        queryClient.invalidateQueries({ queryKey: postKeys.lists }),
+      ]);
 
       if (data.followed) {
         toast.success(`You are now following @${username}`, {
@@ -31,12 +33,29 @@ export const useFollowMutation = (username: string) => {
         });
       }
     },
-    onError: (err: { message?: string; response?: { data?: { message?: string } } }) => {
-      const msg = err?.message || err?.response?.data?.message || 'Please try again in a moment.';
-
+    onError: (err: { message?: string }) => {
       toast.error('Follow update failed', {
-        description: msg,
+        description: err.message || 'Please try again in a moment.',
       });
+    },
+  });
+};
+
+export const useEditUserMutation = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationKey: userMutationKeys.edit,
+    mutationFn: editUser,
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: userKeys.all }),
+        queryClient.invalidateQueries({ queryKey: postKeys.all }),
+        queryClient.invalidateQueries({ queryKey: commentKeys.all }),
+        queryClient.invalidateQueries({ queryKey: searchKeys.all }),
+      ]);
+      router.refresh();
     },
   });
 };

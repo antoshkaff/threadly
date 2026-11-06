@@ -1,50 +1,22 @@
 'use client';
 
 import { FileText } from 'lucide-react';
-import { useEffect, useRef } from 'react';
-import { useIntersection } from 'react-use';
 
-import { PostSkeleton, useInfinityPosts } from '@/entities/post';
-import { useUser } from '@/entities/user/model/store';
+import { PostSkeleton } from '@/entities/post';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/shared/ui/empty';
-import { PostCard } from '@/widgets/post';
 
-import type { RefObject } from 'react';
+import { usePostInfinityList } from '../../model/usePostInfinityList';
+import PostCard from '../PostCard';
 
 type Props = {
   username?: string;
   onlyFollowing?: boolean;
 };
 const PostInfinityList = ({ username, onlyFollowing }: Props) => {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isPending } =
-    useInfinityPosts({ username, onlyFollowing });
-
-  const items = data?.pages.flatMap((page) => page.items);
-  const user = useUser((state) => state.user);
-
-  const intersectionRef = useRef<HTMLDivElement | null>(null);
-  const intersection = useIntersection(intersectionRef as RefObject<HTMLElement>, {
-    root: null,
-    rootMargin: '300px',
-    threshold: 0,
+  const { intersectionRef, isFetchingNextPage, isLoading, items, user } = usePostInfinityList({
+    username,
+    onlyFollowing,
   });
-
-  useEffect(() => {
-    if (!intersection?.isIntersecting) return;
-    if (!data || isLoading || isPending) return;
-    if (!hasNextPage) return;
-    if (isFetchingNextPage) return;
-
-    fetchNextPage();
-  }, [
-    intersection?.isIntersecting,
-    data,
-    hasNextPage,
-    isLoading,
-    isPending,
-    isFetchingNextPage,
-    fetchNextPage,
-  ]);
 
   return !isLoading && !items?.length ? (
     <Empty>

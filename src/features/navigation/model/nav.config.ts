@@ -1,7 +1,8 @@
 import { House, Newspaper, User } from 'lucide-react';
 
-import type { NavItem } from '@/features/navigation/model/nav.types';
 import { ROUTES } from '@/shared/config/routes.config';
+
+import type { NavItem } from './nav.types';
 
 export const NAV_CONFIG: NavItem[] = [
   {

@@ -1,90 +1,18 @@
 'use client';
 
-import { useFormik } from 'formik';
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useEffect, useMemo, useState } from 'react';
-import { toast } from 'sonner';
 
-import { useCreatePostMutation } from '@/features/post/add-post/api/hooks';
-import { uploadImages } from '@/shared/api/api';
-import { zodValidate } from '@/shared/lib/utils/zodValidate';
 import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/shared/ui/field';
 import { Textarea } from '@/shared/ui/textarea';
-import { CreatePostInput } from '@shared/contracts/post.dto';
 
-const MAX_IMAGES = 10;
-const MAX_SIZE_MB = 10;
-export const FORM_ID = 'add-post-form';
+import { FORM_ID, MAX_IMAGES } from '../../model/constants';
+import { useAddPostForm } from '../../model/useAddPostForm';
+
+export { FORM_ID } from '../../model/constants';
 
 type Props = { className?: string };
 const AddPostForm = ({ className }: Props) => {
-  const { mutateAsync } = useCreatePostMutation();
-  const [files, setFiles] = useState<File[]>([]);
-
-  const previews = useMemo(
-    () => files.map((f) => ({ file: f, url: URL.createObjectURL(f) })),
-    [files],
-  );
-
-  useEffect(() => {
-    return () => {
-      previews.forEach((p) => URL.revokeObjectURL(p.url));
-    };
-  }, [previews]);
-
-  const form = useFormik({
-    initialValues: {
-      content: '',
-      images: [] as string[],
-    },
-    validate: zodValidate(CreatePostInput),
-    validateOnBlur: true,
-    validateOnChange: false,
-    onSubmit: async (values, helpers) => {
-      try {
-        const op = (async () => {
-          const res = files.length ? await uploadImages(files, 'posts') : { urls: [] };
-          const { urls } = res;
-
-          const payload = { content: values.content, images: urls };
-          await mutateAsync(payload);
-        })();
-
-        toast.promise(op, {
-          loading: 'Loading...',
-          success: 'Post has been created!',
-          error: 'Upload failed',
-        });
-
-        setFiles([]);
-        helpers.resetForm();
-      } catch (e) {
-        console.error(e);
-        toast.error('Upload failed');
-        helpers.setStatus('Upload failed');
-      }
-    },
-  });
-
-  const onSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const picked = Array.from(e.currentTarget.files ?? []);
-
-    const valid = picked.filter((f) => {
-      const okType = f.type.startsWith('image/');
-      const okSize = f.size <= MAX_SIZE_MB * 1024 * 1024;
-      return okType && okSize;
-    });
-
-    const room = MAX_IMAGES - files.length;
-    const next = [...files, ...valid.slice(0, Math.max(0, room))];
-    setFiles(next);
-
-    e.currentTarget.value = '';
-  };
-
-  const removeFileAt = (idx: number) => {
-    setFiles((prev) => prev.filter((_, i) => i !== idx));
-  };
+  const { form, files, previews, handleSelect, handleRemoveFileAt } = useAddPostForm();
 
   return (
     <AnimatePresence>
@@ -134,7 +62,7 @@ const AddPostForm = ({ className }: Props) => {
                   type="file"
                   accept="image/*"
                   multiple
-                  onChange={onSelect}
+                  onChange={handleSelect}
                   className="sr-only"
                 />
                 <span className="inline-flex w-full cursor-pointer items-center justify-center rounded-md border px-3 py-1.5 text-sm">
@@ -186,7 +114,7 @@ const AddPostForm = ({ className }: Props) => {
 
                       <motion.button
                         type="button"
-                        onClick={() => removeFileAt(i)}
+                        onClick={() => handleRemoveFileAt(i)}
                         className="absolute top-1 right-1 rounded bg-red-500/70 px-2 py-0.5 text-xs text-white opacity-0 group-hover:opacity-100"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}

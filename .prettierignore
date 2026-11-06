@@ -7,5 +7,7 @@ coverage
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
-src/server/generated
+server/generated/prisma
 README.md
+.ai-workflow/
+next-env.d.ts

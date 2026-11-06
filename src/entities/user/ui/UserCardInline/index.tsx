@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { UserAvatar } from '@/entities/user';
 import { ROUTES } from '@/shared/config/routes.config';
+
+import UserAvatar from '../UserAvatar';
 
 import type { PublicUser } from '@shared/types/user';
 
