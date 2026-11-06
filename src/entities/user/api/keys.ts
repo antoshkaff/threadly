@@ -1,4 +1,4 @@
 export const userKeys = {
-    me: ['me'],
-    edit: ['user-edit'],
+  me: ['me'],
+  edit: ['user-edit'],
 };

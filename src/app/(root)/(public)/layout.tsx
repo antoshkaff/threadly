@@ -1,20 +1,17 @@
-import { ReactNode } from 'react';
-import { Sidebar } from '@/widgets/side-bar';
 import PageTransition from '@/shared/ui/PageTransition';
+import { Sidebar } from '@/widgets/side-bar';
+
+import type { ReactNode } from 'react';
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
-    return (
-        <main className="min-h-screen grid grid-cols-[310px_1fr] max-xl:grid-cols-[250px_1fr] max-lg:grid-cols-1">
-            <Sidebar className={'row-span-full col-start-1 max-lg:hidden'} />
-            <PageTransition>
-                <section
-                    className={
-                        'col-start-2 transition-colors duration-200 h-full'
-                    }
-                >
-                    {children}
-                </section>
-            </PageTransition>
-        </main>
-    );
+  return (
+    <main className="grid min-h-screen grid-cols-[310px_1fr] max-xl:grid-cols-[250px_1fr] max-lg:grid-cols-1">
+      <Sidebar className={'col-start-1 row-span-full max-lg:hidden'} />
+      <PageTransition>
+        <section className={'col-start-2 h-full transition-colors duration-200'}>
+          {children}
+        </section>
+      </PageTransition>
+    </main>
+  );
 }

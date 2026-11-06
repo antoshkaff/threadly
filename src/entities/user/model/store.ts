@@ -1,15 +1,16 @@
 import { create } from 'zustand/react';
-import { PublicUser } from '@shared/types/user';
+
+import type { PublicUser } from '@shared/types/user';
 
 type State = {
-    user: PublicUser | null;
+  user: PublicUser | null;
 };
 
 type Actions = {
-    setUser: (u: PublicUser | null) => void;
+  setUser: (u: PublicUser | null) => void;
 };
 
 export const useUser = create<State & Actions>((set) => ({
-    user: null,
-    setUser: (u) => set({ user: u }),
+  user: null,
+  setUser: (u) => set({ user: u }),
 }));

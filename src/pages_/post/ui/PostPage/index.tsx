@@ -1,42 +1,41 @@
 'use client';
 
 import React from 'react';
-import { PublicPost } from '@shared/types/post';
-import { PostCard } from '@/widgets/post';
-import { usePostDetails } from '@/pages_/post/api/hooks';
+
 import { useUser } from '@/entities/user/model/store';
-import { CommentsInfinityList } from '@/widgets/comment';
 import { AddCommentForm } from '@/features/comment';
-import { PublicComment } from '@shared/types/comment';
+import { usePostDetails } from '@/pages_/post/api/hooks';
+import { CommentsInfinityList } from '@/widgets/comment';
+import { PostCard } from '@/widgets/post';
+
+import type { PublicComment } from '@shared/types/comment';
+import type { PublicPost } from '@shared/types/post';
 
 type Props = {
-    postId: string;
-    initialPost: { post: PublicPost };
-    initialComments: PublicComment[];
+  postId: string;
+  initialPost: { post: PublicPost };
+  initialComments: PublicComment[];
 };
 
 const PostPage = ({ postId, initialPost, initialComments }: Props) => {
-    const user = useUser((s) => s.user);
-    const { data } = usePostDetails({
-        postId,
-        initialPost,
-    });
+  const user = useUser((s) => s.user);
+  const { data } = usePostDetails({
+    postId,
+    initialPost,
+  });
 
-    return (
-        <section className="min-h-screen relative grid grid-rows-[auto_1fr_auto]">
-            <PostCard post={data} user={user} variant={'detailed'} />
-            <CommentsInfinityList
-                postId={postId}
-                initialComments={initialComments}
-            />
-            {!!user && (
-                <AddCommentForm
-                    postId={postId}
-                    className="bg-[var(--background-second)] w-full sticky bottom-0 border-t border-t-[--border]"
-                />
-            )}
-        </section>
-    );
+  return (
+    <section className="relative grid min-h-screen grid-rows-[auto_1fr_auto]">
+      <PostCard post={data} user={user} variant={'detailed'} />
+      <CommentsInfinityList postId={postId} initialComments={initialComments} />
+      {!!user && (
+        <AddCommentForm
+          postId={postId}
+          className="sticky bottom-0 w-full border-t border-t-[--border] bg-[var(--background-second)]"
+        />
+      )}
+    </section>
+  );
 };
 
 export default PostPage;

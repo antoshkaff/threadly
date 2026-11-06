@@ -1,7 +1,8 @@
 import { baseFetch } from '@/shared/api/baseFetch';
-import { PublicPost } from '@shared/types/post';
 import { API } from '@/shared/constants/api';
 
+import type { PublicPost } from '@shared/types/post';
+
 export const getPost = async (postId: string) => {
-    return await baseFetch<{ post: PublicPost }>(API.POST_DETAILS(postId));
+  return await baseFetch<{ post: PublicPost }>(API.POST_DETAILS(postId));
 };

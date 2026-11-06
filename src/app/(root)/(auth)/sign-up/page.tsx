@@ -1,10 +1,11 @@
 import { SignUpPage } from '@/pages_/sign-up';
-import { Metadata } from 'next';
+
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Sign up',
+  title: 'Sign up',
 };
 
 export default function Page() {
-    return <SignUpPage />;
+  return <SignUpPage />;
 }

@@ -1,19 +1,22 @@
-import { useQuery } from '@tanstack/react-query';
-import { SEARCH_KEYS } from '@/features/search/api/keys';
+import { queryOptions, useQuery } from '@tanstack/react-query';
+
 import { search } from '@/features/search/api/api';
+import { SEARCH_KEYS } from '@/features/search/api/keys';
 
 export const useSearch = ({
-    q,
-    type,
-    enabled,
+  q,
+  type,
+  enabled,
 }: {
-    q: string;
-    type: ('posts' | 'comments' | 'users')[];
-    enabled: boolean;
+  q: string;
+  type: ('posts' | 'comments' | 'users')[];
+  enabled: boolean;
 }) => {
-    return useQuery({
-        queryKey: SEARCH_KEYS.list(q, type),
-        queryFn: () => search({ q, type }),
-        enabled,
-    });
+  return useQuery(
+    queryOptions({
+      queryKey: SEARCH_KEYS.list(q, type),
+      queryFn: () => search({ q, type }),
+      enabled,
+    }),
+  );
 };
