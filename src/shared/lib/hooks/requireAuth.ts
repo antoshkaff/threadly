@@ -2,12 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 
-import { useUser } from '@/entities/user/model/store';
+import { useCurrentUser } from '@/entities/user/api/hooks';
 import { ROUTES } from '@/shared/config/routes.config';
 
 export const useRequireAuth = () => {
   const router = useRouter();
-  const user = useUser((s) => s.user);
+  const user = useCurrentUser();
 
   const isAuth = () => {
     if (!user) {

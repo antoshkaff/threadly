@@ -24,11 +24,11 @@ export const register = (data: {
 };
 
 export const logout = async () => {
-  return baseFetch(API.LOGOUT);
+  return baseFetch(API.LOGOUT, { method: 'POST' });
 };
 
-export const getUser = async (): Promise<{ user: PublicUser }> => {
-  return await baseFetch(API.ME);
+export const getUser = async (signal?: AbortSignal): Promise<{ user: PublicUser }> => {
+  return await baseFetch(API.ME, { signal });
 };
 
 export const editUser = async (data: EditProfileInput) => {

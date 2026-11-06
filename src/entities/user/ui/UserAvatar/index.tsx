@@ -1,6 +1,9 @@
+'use client';
+
 import { cva } from 'class-variance-authority';
+import { UserRound } from 'lucide-react';
 import Image from 'next/image';
-import React from 'react';
+import { useState } from 'react';
 
 import { cn } from '@/shared/lib';
 
@@ -24,10 +27,29 @@ export type Props = {
   link: string;
 } & VariantProps<typeof userAvatarVariants>;
 
-const UserAvatar = ({ link, size }: Props) => {
+const UserAvatar = ({ link, size, className }: Props) => {
+  const [failedLink, setFailedLink] = useState<string | null>(null);
+
   return (
-    <div className={cn(userAvatarVariants({ size }))}>
-      <Image src={link} height={56} width={56} alt={'Profile picture'} className={'object-cover'} />
+    <div className={cn(userAvatarVariants({ size }), className)}>
+      {link && failedLink !== link ? (
+        <Image
+          key={link}
+          src={link}
+          height={56}
+          width={56}
+          alt="Profile picture"
+          className="size-full object-cover"
+          unoptimized
+          onError={() => setFailedLink(link)}
+        />
+      ) : (
+        <UserRound
+          className="size-full bg-muted p-2 text-muted-foreground"
+          role="img"
+          aria-label="Profile picture unavailable"
+        />
+      )}
     </div>
   );
 };

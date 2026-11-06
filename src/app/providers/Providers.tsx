@@ -1,7 +1,6 @@
 'use client';
 
-import { QueryClient } from '@tanstack/query-core';
-import { QueryClientProvider } from '@tanstack/react-query';
+import { isServer, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider } from 'next-themes';
 import React from 'react';
@@ -15,9 +14,26 @@ const Auth = () => {
   return null;
 };
 
-const queryClient = new QueryClient();
+const makeQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 30 * 1000,
+      },
+    },
+  });
+
+let browserQueryClient: QueryClient | undefined;
+
+const getQueryClient = () => {
+  if (isServer) return makeQueryClient();
+  browserQueryClient ??= makeQueryClient();
+  return browserQueryClient;
+};
 
 const Providers = ({ children }: { children: ReactNode }) => {
+  const queryClient = getQueryClient();
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider

@@ -5,19 +5,19 @@ import { useEffect, useRef } from 'react';
 import { useIntersection } from 'react-use';
 
 import { useInfinityComments } from '@/entities/comment/api/hooks';
-import { useUser } from '@/entities/user/model/store';
+import type { CommentsPage } from '@/entities/comment/api/hooks';
+import { useCurrentUser } from '@/entities/user/api/hooks';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/shared/ui/empty';
 import CommentCard from '@/widgets/comment/ui/CommentCard';
 
-import type { PublicComment } from '@shared/types/comment';
 import type { RefObject } from 'react';
 
 type Props = {
   postId: string;
-  initialComments: PublicComment[];
+  initialComments: CommentsPage;
 };
 const CommentsInfinityList = ({ postId, initialComments }: Props) => {
-  const { data, fetchNextPage, isLoading, isFetchingNextPage, hasNextPage } = useInfinityComments({
+  const { data, fetchNextPage, isLoading, isFetching, hasNextPage } = useInfinityComments({
     postId,
     initialComments,
   });
@@ -35,14 +35,14 @@ const CommentsInfinityList = ({ postId, initialComments }: Props) => {
     if (!intersection.isIntersecting) return;
     if (!hasNextPage) return;
     if (isLoading) return;
-    if (isFetchingNextPage) return;
+    if (isFetching) return;
 
-    fetchNextPage();
-  }, [intersection, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading]);
+    fetchNextPage({ cancelRefetch: false });
+  }, [intersection, fetchNextPage, hasNextPage, isFetching, isLoading]);
 
-  const user = useUser((s) => s.user);
+  const user = useCurrentUser();
 
-  return !isLoading && !initialComments.length ? (
+  return !isLoading && !comments?.length ? (
     <Empty>
       <EmptyHeader>
         <EmptyMedia variant="icon">

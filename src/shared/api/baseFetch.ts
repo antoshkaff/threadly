@@ -16,12 +16,13 @@ export async function baseFetch<T>(url: string, init?: RequestInit) {
   const body = init?.body;
   const isFormData = typeof FormData !== 'undefined' && body instanceof FormData;
 
-  const headers = {
-    ...(init?.headers || {}),
-    ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
-  };
+  const headers = new Headers(init?.headers);
+  if (!isFormData && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
 
   const res = await fetch(`${baseUrl}/${url}`, {
+    cache: 'no-store',
     ...init,
     headers,
     credentials: 'include',

@@ -2,84 +2,100 @@
 
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
-import { POST_KEYS } from '@/entities/post/api/keys';
+import { commentKeys } from '@/entities/comment/api/keys';
+import { postKeys } from '@/entities/post/api/keys';
 import { editUser, getUser, login, register, logout } from '@/entities/user/api/api';
-import { userKeys } from '@/entities/user/api/keys';
-import { useUser } from '@/entities/user/model/store';
-import { PROFILE_KEYS } from '@/pages_/profile/api/keys';
+import { userKeys, userMutationKeys } from '@/entities/user/api/keys';
+import { searchKeys } from '@/features/search/api/keys';
 import { ERROR_CODES } from '@shared/constants';
 
-import type { PublicProfile, PublicUser } from '@shared/types/user';
+import type { QueryClient } from '@tanstack/react-query';
+
+const refreshSession = async (queryClient: QueryClient) => {
+  await queryClient.cancelQueries();
+  queryClient.removeQueries({ type: 'inactive' });
+  await queryClient.resetQueries();
+};
 
 export const useLoginMutation = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationKey: userKeys.me,
+    mutationKey: userMutationKeys.login,
+    scope: { id: 'auth' },
     mutationFn: login,
+    onSuccess: () => refreshSession(queryClient),
   });
 };
 
 export const useRegisterMutation = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationKey: userKeys.me,
+    mutationKey: userMutationKeys.register,
+    scope: { id: 'auth' },
     mutationFn: register,
+    onSuccess: () => refreshSession(queryClient),
   });
 };
 
 export const useLogoutMutation = () => {
+  const queryClient = useQueryClient();
   const router = useRouter();
-  const setUser = useUser((s) => s.setUser);
 
   return useMutation({
+    mutationKey: userMutationKeys.logout,
+    scope: { id: 'auth' },
     mutationFn: logout,
-    onSuccess: () => {
-      setUser(null);
+    onSuccess: async () => {
+      await refreshSession(queryClient);
       router.refresh();
     },
   });
 };
 
 export const useMe = () => {
-  const setUser = useUser((s) => s.setUser);
-  const { data, isSuccess } = useQuery(
+  return useQuery(
     queryOptions({
       queryKey: userKeys.me,
-      queryFn: getUser,
+      queryFn: async ({ signal }) => {
+        try {
+          return await getUser(signal);
+        } catch (error) {
+          if (
+            typeof error === 'object' &&
+            error !== null &&
+            'code' in error &&
+            (error.code === ERROR_CODES.unauthorized || error.code === ERROR_CODES.not_found)
+          ) {
+            return { user: null };
+          }
+          throw error;
+        }
+      },
       retry: false,
-      select: (data) => data.user,
-      throwOnError: (error: unknown) =>
-        !(
-          typeof error === 'object' &&
-          error !== null &&
-          'code' in error &&
-          error.code === ERROR_CODES.unauthorized
-        ),
     }),
   );
-
-  useEffect(() => {
-    if (isSuccess) setUser(data);
-  }, [isSuccess, data, setUser]);
 };
 
-export const useEditUserMutation = (user: PublicUser) => {
+export const useCurrentUser = () => useMe().data?.user ?? null;
+
+export const useEditUserMutation = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
   return useMutation({
-    mutationKey: userKeys.edit,
+    mutationKey: userMutationKeys.edit,
     mutationFn: editUser,
-    onSuccess: (data) => {
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: userKeys.all }),
+        queryClient.invalidateQueries({ queryKey: postKeys.all }),
+        queryClient.invalidateQueries({ queryKey: commentKeys.all }),
+        queryClient.invalidateQueries({ queryKey: searchKeys.all }),
+      ]);
       router.refresh();
-      queryClient.setQueryData(userKeys.me, () => ({ user: data }));
-      queryClient.setQueryData(PROFILE_KEYS.PROFILE(user.username), (old: PublicProfile) => ({
-        ...old,
-        name: data.name,
-        bio: data.bio,
-        avatarUrl: data.avatarUrl,
-      }));
-      queryClient.invalidateQueries({ queryKey: POST_KEYS.postList() });
     },
   });
 };

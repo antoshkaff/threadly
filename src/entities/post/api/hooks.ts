@@ -1,3 +1,5 @@
+'use client';
+
 import {
   infiniteQueryOptions,
   useInfiniteQuery,
@@ -5,11 +7,10 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
+import { commentKeys } from '@/entities/comment/api/keys';
 import { deletePost, getPostsInfinity } from '@/entities/post/api/api';
-import { POST_KEYS } from '@/entities/post/api/keys';
-
-import type { PublicPost } from '@shared/types/post';
-import type { InfiniteData } from '@tanstack/query-core';
+import { postKeys, postMutationKeys } from '@/entities/post/api/keys';
+import { searchKeys } from '@/features/search/api/keys';
 
 export const useInfinityPosts = ({
   username,
@@ -20,49 +21,33 @@ export const useInfinityPosts = ({
 }) => {
   return useInfiniteQuery(
     infiniteQueryOptions({
-      queryKey: POST_KEYS.postList(username, onlyFollowing),
-
-      queryFn: ({ pageParam }) => getPostsInfinity({ pageParam, username, onlyFollowing }),
-
+      queryKey: postKeys.list({ username, onlyFollowing }),
+      queryFn: ({ pageParam, signal }) =>
+        getPostsInfinity({ pageParam, username, onlyFollowing, signal }),
       initialPageParam: null as string | null,
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }),
   );
 };
 
-type PostsPage = {
-  items: PublicPost[];
-  nextCursor?: string | null;
-};
-
 export const useDeletePostMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: POST_KEYS.delete,
+    mutationKey: postMutationKeys.delete,
     mutationFn: deletePost,
-    onSuccess: async (data) => {
-      await queryClient.cancelQueries({ queryKey: POST_KEYS.postList() });
+    onSuccess: async (_data, postId) => {
+      await Promise.all([
+        queryClient.cancelQueries({ queryKey: postKeys.detail(postId) }),
+        queryClient.cancelQueries({ queryKey: commentKeys.list(postId) }),
+      ]);
+      queryClient.removeQueries({ queryKey: postKeys.detail(postId) });
+      queryClient.removeQueries({ queryKey: commentKeys.list(postId) });
 
-      const prev = queryClient.getQueryData<InfiniteData<PostsPage>>(POST_KEYS.postList());
-
-      if (prev) {
-        const next: InfiniteData<PostsPage> = {
-          pageParams: [...prev.pageParams],
-          pages: prev.pages.map((page) => ({
-            ...page,
-            items: page.items.filter((post) => post.id !== data.postId),
-          })),
-        };
-
-        queryClient.setQueryData(POST_KEYS.postList(), next);
-      }
-
-      queryClient.removeQueries({
-        queryKey: POST_KEYS.post(data.postId),
-      });
-
-      return { prev };
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: postKeys.lists }),
+        queryClient.invalidateQueries({ queryKey: searchKeys.all }),
+      ]);
     },
   });
 };

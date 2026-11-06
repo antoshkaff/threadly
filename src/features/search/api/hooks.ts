@@ -1,7 +1,7 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
 import { search } from '@/features/search/api/api';
-import { SEARCH_KEYS } from '@/features/search/api/keys';
+import { searchKeys } from '@/features/search/api/keys';
 
 export const useSearch = ({
   q,
@@ -14,8 +14,8 @@ export const useSearch = ({
 }) => {
   return useQuery(
     queryOptions({
-      queryKey: SEARCH_KEYS.list(q, type),
-      queryFn: () => search({ q, type }),
+      queryKey: searchKeys.list(q, type),
+      queryFn: ({ signal }) => search({ q, type, signal }),
       enabled,
     }),
   );

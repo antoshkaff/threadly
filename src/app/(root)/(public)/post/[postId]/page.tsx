@@ -1,9 +1,11 @@
 import { PostPage } from '@/pages_/post';
 import { baseFetch } from '@/shared/api/baseFetch';
 import { API } from '@/shared/constants/api';
+import { CommentService } from '@server/modules/comment/comment.service';
+import { PostService } from '@server/modules/post/post.service';
 import { APP_URL } from '@shared/constants';
+import { getServerUser } from '@shared/getServerUser';
 
-import type { PublicComment } from '@shared/types/comment';
 import type { PublicPost } from '@shared/types/post';
 import type { Metadata } from 'next';
 
@@ -84,15 +86,13 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 
 const Page = async ({ params }: { params: Promise<Params> }) => {
   const postId = (await params).postId;
-  const postPromise = baseFetch<{ post: PublicPost }>(API.POST_DETAILS(postId));
+  const user = await getServerUser();
+  const [post, comments] = await Promise.all([
+    PostService.getById(postId, user?.id),
+    CommentService.listForPost({ postId, limit: 10 }),
+  ]);
 
-  const commentsPromise = baseFetch<{
-    items: PublicComment[];
-    nextCursor: string | null;
-  }>(API.COMMENTS_GET(postId, null, 10));
-
-  const [post, comments] = await Promise.all([postPromise, commentsPromise]);
-  return <PostPage postId={postId} initialPost={post} initialComments={comments.items} />;
+  return <PostPage postId={postId} initialPost={{ post }} initialComments={comments} />;
 };
 
 export default Page;

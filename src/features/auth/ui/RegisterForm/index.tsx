@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { useRegisterMutation } from '@/entities/user/api/hooks';
-import { useUser } from '@/entities/user/model/store';
 import { ROUTES } from '@/shared/config/routes.config';
 import { zodValidate } from '@/shared/lib/utils/zodValidate';
 import type { ApiError } from '@/shared/types/api.types';
@@ -28,7 +27,6 @@ import { RegisterInput } from '@shared/contracts/user.dto';
 const RegisterForm = () => {
   const router = useRouter();
   const { mutateAsync, isPending } = useRegisterMutation();
-  const setUser = useUser((s) => s.setUser);
 
   const form = useFormik({
     initialValues: {
@@ -43,8 +41,7 @@ const RegisterForm = () => {
     onSubmit: async (values) => {
       form.setStatus(null);
       try {
-        const { user } = await mutateAsync(values);
-        setUser(user);
+        await mutateAsync(values);
         router.replace(ROUTES.HOME);
         router.refresh();
       } catch (e: unknown) {

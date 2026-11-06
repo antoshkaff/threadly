@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useDebounce } from 'react-use';
 
-import { useUser } from '@/entities/user/model/store';
+import { useCurrentUser } from '@/entities/user/api/hooks';
 import { useSearch } from '@/features/search/api/hooks';
 import { SEARCH_TABS_CONFIG } from '@/features/search/model/config';
 import { SEARCH_TABS } from '@/features/search/model/constants';
@@ -40,7 +40,7 @@ const SearchPage = () => {
   const q = useSearchStore((s) => s.q);
   const setQuery = useSearchStore((s) => s.setQuery);
   const filters = useSearchStore((s) => s.filters);
-  const user = useUser((s) => s.user);
+  const user = useCurrentUser();
   const [debouncedQ, setDebouncedQ] = useState(searchParamsQuery || q);
 
   useEffect(() => {

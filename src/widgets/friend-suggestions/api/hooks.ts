@@ -1,13 +1,13 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
+import { userKeys } from '@/entities/user/api/keys';
 import { getFriendSuggestions } from '@/widgets/friend-suggestions/api/api';
-import { FRIEND_SUGGESTIONS_KEYS } from '@/widgets/friend-suggestions/api/keys';
 
 export const useFriendSuggestions = (limit?: number) => {
   return useQuery(
     queryOptions({
-      queryKey: [...FRIEND_SUGGESTIONS_KEYS.list, limit],
-      queryFn: () => getFriendSuggestions(limit),
+      queryKey: userKeys.suggestions(limit),
+      queryFn: ({ signal }) => getFriendSuggestions(limit, signal),
     }),
   );
 };

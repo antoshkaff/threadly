@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 
 import { useLoginMutation } from '@/entities/user';
-import { useUser } from '@/entities/user/model/store';
 import { ROUTES } from '@/shared/config/routes.config';
 import { zodValidate } from '@/shared/lib/utils/zodValidate';
 import type { ApiError } from '@/shared/types/api.types';
@@ -21,7 +20,6 @@ import { LoginInput } from '@shared/contracts/user.dto';
 const LoginForm = () => {
   const router = useRouter();
   const { mutateAsync, isPending } = useLoginMutation();
-  const setUser = useUser((s) => s.setUser);
 
   const form = useFormik({
     initialValues: {
@@ -32,8 +30,7 @@ const LoginForm = () => {
     onSubmit: async (values) => {
       form.setStatus(null);
       try {
-        const { user } = await mutateAsync(values);
-        setUser(user);
+        await mutateAsync(values);
         router.replace(ROUTES.HOME);
         router.refresh();
       } catch (e: unknown) {

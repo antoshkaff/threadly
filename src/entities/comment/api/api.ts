@@ -6,12 +6,15 @@ import type { PublicComment } from '@shared/types/comment';
 export const getCommentsInfinity = async ({
   postId,
   pageParam,
+  signal,
 }: {
   postId: string;
   pageParam: string | null;
+  signal?: AbortSignal;
 }) => {
   return await baseFetch<{ items: PublicComment[]; nextCursor: string }>(
     API.COMMENTS_GET(postId, pageParam, 10),
+    { signal },
   );
 };
 export const deleteComment = async ({

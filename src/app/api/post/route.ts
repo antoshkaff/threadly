@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { AppError } from '@server/modules/error/AppError';
 import { PostService } from '@server/modules/post/post.service';
 import { ERROR_CODES } from '@shared/constants';
+import { getServerUser } from '@shared/getServerUser';
 import { requireUserId } from '@shared/requireUserId';
 
 import type { NextRequest } from 'next/server';
@@ -14,7 +15,8 @@ export async function GET(req: NextRequest) {
       throw new AppError(ERROR_CODES.validation, 'Post id is required');
     }
 
-    const post = await PostService.getById(postId);
+    const user = await getServerUser();
+    const post = await PostService.getById(postId, user?.id);
 
     return NextResponse.json({ post: post }, { status: 200 });
   } catch (e) {
