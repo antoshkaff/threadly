@@ -1,7 +1,6 @@
 import { Plus } from 'lucide-react';
 import React from 'react';
 
-import AddPostForm, { FORM_ID } from '@/features/post/add-post/ui/AddPostForm';
 import { Button } from '@/shared/ui/button';
 import {
   Dialog,
@@ -13,6 +12,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/shared/ui/dialog';
+
+import AddPostForm, { FORM_ID } from '../AddPostForm';
 
 const AddPost = () => {
   return (

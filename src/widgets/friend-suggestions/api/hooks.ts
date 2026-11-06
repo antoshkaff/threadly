@@ -1,7 +1,8 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
-import { userKeys } from '@/entities/user/api/keys';
-import { getFriendSuggestions } from '@/widgets/friend-suggestions/api/api';
+import { userKeys } from '@/entities/user';
+
+import { getFriendSuggestions } from './api';
 
 export const useFriendSuggestions = (limit?: number) => {
   return useQuery(

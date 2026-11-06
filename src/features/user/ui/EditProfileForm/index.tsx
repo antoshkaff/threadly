@@ -1,17 +1,12 @@
 'use client';
-import { useFormik } from 'formik';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 
-import { useEditUserMutation } from '@/entities/user';
-import { uploadImages } from '@/shared/api/api';
-import { zodValidate } from '@/shared/lib/utils/zodValidate';
 import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/shared/ui/field';
 import { Input } from '@/shared/ui/input';
 import { Textarea } from '@/shared/ui/textarea';
-import { EditProfileInput } from '@shared/contracts/user.dto';
+
+import { useEditProfileForm } from '../../model/useEditProfileForm';
 
 import type { PublicUser } from '@shared/types/user';
 
@@ -21,55 +16,7 @@ type Props = {
   user: PublicUser;
 };
 const EditProfileForm = ({ user }: Props) => {
-  const { mutateAsync } = useEditUserMutation();
-
-  const form = useFormik({
-    initialValues: {
-      name: user.name,
-      bio: user.bio || '',
-    },
-    validate: zodValidate(EditProfileInput),
-    validateOnChange: false,
-    validateOnBlur: true,
-    onSubmit: (values, formikHelpers) => {
-      try {
-        const op = (async () => {
-          const res = avatarFile ? await uploadImages(avatarFile, 'avatars') : { urls: [] };
-          const { urls } = res;
-
-          const payload = { ...values, avatarUrl: urls[0] };
-          await mutateAsync(payload);
-        })();
-
-        toast.promise(op, {
-          loading: 'Saving your changes...',
-          success: 'Profile updated successfully!',
-          error: 'Could not update profile',
-        });
-      } catch (e) {
-        const error = e as Error;
-        console.error(error);
-        toast.error('Upload failed');
-        formikHelpers.setStatus('Upload failed');
-      }
-    },
-  });
-
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarPreview, setPreviewFile] = useState(user.avatarUrl);
-
-  useEffect(() => {
-    if (!avatarPreview.startsWith('blob:')) return;
-    return () => URL.revokeObjectURL(avatarPreview);
-  }, [avatarPreview]);
-
-  const onSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.currentTarget.files?.[0];
-    if (!file) return;
-
-    setAvatarFile(file);
-    setPreviewFile(URL.createObjectURL(file));
-  };
+  const { avatarPreview, form, handleSelect } = useEditProfileForm(user);
 
   return (
     <form id={EDIT_PROFILE_FORM_ID} onSubmit={form.handleSubmit}>
@@ -89,7 +36,7 @@ const EditProfileForm = ({ user }: Props) => {
               type="file"
               accept="image/*"
               className="sr-only"
-              onChange={onSelect}
+              onChange={handleSelect}
             />
             <span className="inline-flex w-full cursor-pointer items-center justify-center rounded-md border px-3 py-1.5 text-sm">
               Choose image

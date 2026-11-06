@@ -2,10 +2,11 @@
 
 import React from 'react';
 
-import { useFollowMutation } from '@/features/user/api/hooks';
-import { useRequireAuth } from '@/shared/lib';
+import { useRequireAuth } from '@/entities/user';
 import { Button } from '@/shared/ui/button';
 import { Spinner } from '@/shared/ui/spinner';
+
+import { useFollowMutation } from '../../api/hooks';
 
 type Props = {
   username: string;

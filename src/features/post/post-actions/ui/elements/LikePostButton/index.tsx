@@ -3,19 +3,21 @@
 import { Heart } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { usePostLikeMutation } from '@/features/post/post-actions/api/hooks';
-import { cn, useRequireAuth } from '@/shared/lib';
+import { useRequireAuth } from '@/entities/user';
+import { cn } from '@/shared/lib';
 import { formatNumberToCompact } from '@/shared/lib/utils/formatters';
 import { Button } from '@/shared/ui/button';
 import { Spinner } from '@/shared/ui/spinner';
+
+import { usePostLikeMutation } from '../../../api/hooks';
 
 export type LikeDataProps = {
   amount: number;
   isLiked: boolean;
 };
 type Props = {
-  data: LikeDataProps;
   postId: string;
+  data: LikeDataProps;
 };
 
 const LikePostButton = ({ postId, data }: Props) => {

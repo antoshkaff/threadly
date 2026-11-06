@@ -17,7 +17,8 @@ import {
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/shared/ui/empty';
 import { ScrollArea } from '@/shared/ui/scroll-area';
 import { Skeleton } from '@/shared/ui/skeleton';
-import { useSubscriptions } from '@/widgets/user/api/hooks';
+
+import { useSubscriptions } from '../../api/hooks';
 
 import type { PublicProfile } from '@shared/types/user';
 

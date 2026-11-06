@@ -19,9 +19,3 @@ export const getPostsInfinity = async ({
     { signal },
   );
 };
-
-export const deletePost = async (postId: string) => {
-  return await baseFetch<{ postId: string }>(API.POST_DELETE(postId), {
-    method: 'DELETE',
-  });
-};

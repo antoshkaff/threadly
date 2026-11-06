@@ -2,9 +2,10 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { postKeys, postMutationKeys } from '@/entities/post/api/keys';
-import { likePost, sharePost } from '@/features/post/post-actions/api/api';
-import { searchKeys } from '@/features/search/api/keys';
+import { postKeys, postMutationKeys } from '@/entities/post';
+import { searchKeys } from '@/entities/search';
+
+import { likePost, sharePost } from './api';
 
 export const usePostLikeMutation = () => {
   const queryClient = useQueryClient();

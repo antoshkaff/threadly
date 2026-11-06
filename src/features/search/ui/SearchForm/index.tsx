@@ -3,9 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-import { Search } from '@/features/search';
-import { useSearchStore } from '@/features/search/model/store';
 import { ROUTES } from '@/shared/config/routes.config';
+
+import { useSearchStore } from '../../model/store';
+import Search from '../Search';
 
 type Props = {
   inputClassName?: string;

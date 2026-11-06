@@ -2,62 +2,17 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { Search } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import { useDebounce } from 'react-use';
 
-import { useCurrentUser } from '@/entities/user/api/hooks';
-import { useSearch } from '@/features/search/api/hooks';
-import { SEARCH_TABS_CONFIG } from '@/features/search/model/config';
-import { SEARCH_TABS } from '@/features/search/model/constants';
-import { useSearchStore } from '@/features/search/model/store';
-import type { SearchResponse } from '@/features/search/model/types';
-import SearchFilters from '@/features/search/ui/SearchFilters';
+import { SearchFilters } from '@/features/search';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/shared/ui/empty';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 
-const isEmptyForTab = (tabValue: string, data?: SearchResponse) => {
-  if (!data) return true;
-
-  switch (tabValue) {
-    case SEARCH_TABS.POSTS:
-      return data.posts.length === 0;
-    case SEARCH_TABS.COMMENTS:
-      return data.comments.length === 0;
-    case SEARCH_TABS.USERS:
-      return data.users.length === 0;
-    case SEARCH_TABS.ALL:
-    default:
-      return data.posts.length === 0 && data.comments.length === 0 && data.users.length === 0;
-  }
-};
+import { isEmptyForTab, useSearchPage } from '../../model/useSearchPage';
+import { SEARCH_TABS_CONFIG } from '../search-tabs.config';
 
 const SearchPage = () => {
-  const params = useSearchParams();
-  const searchParamsQuery = params.get('q');
-
-  const q = useSearchStore((s) => s.q);
-  const setQuery = useSearchStore((s) => s.setQuery);
-  const filters = useSearchStore((s) => s.filters);
-  const user = useCurrentUser();
-  const [debouncedQ, setDebouncedQ] = useState(searchParamsQuery || q);
-
-  useEffect(() => {
-    if (!searchParamsQuery) return;
-
-    setQuery(searchParamsQuery);
-  }, [searchParamsQuery, setQuery]);
-
-  useDebounce(() => setDebouncedQ(q), 400, [q]);
-
-  const { data, isLoading } = useSearch({
-    q: debouncedQ,
-    type: filters,
-    enabled: !!debouncedQ.trim(),
-  });
-
-  const [activeTab, setActiveTab] = useState(SEARCH_TABS.ALL);
+  const { user, data, isLoading, activeTab, setActiveTab } = useSearchPage();
 
   return (
     <section className="grid min-h-screen grid-cols-[1fr_260px] max-lg:grid-cols-[1fr_160px] max-md:grid-cols-1">

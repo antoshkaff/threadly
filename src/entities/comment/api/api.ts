@@ -17,17 +17,3 @@ export const getCommentsInfinity = async ({
     { signal },
   );
 };
-export const deleteComment = async ({
-  postId,
-  commentId,
-}: {
-  postId: string;
-  commentId: string;
-}) => {
-  return await baseFetch<{ postId: string; commentId: string }>(
-    API.COMMENT_DELETE(postId, commentId),
-    {
-      method: 'DELETE',
-    },
-  );
-};

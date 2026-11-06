@@ -1,52 +1,18 @@
 'use client';
 
-import { useFormik } from 'formik';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import React from 'react';
 
-import { useLoginMutation } from '@/entities/user';
 import { ROUTES } from '@/shared/config/routes.config';
-import { zodValidate } from '@/shared/lib/utils/zodValidate';
-import type { ApiError } from '@/shared/types/api.types';
 import { Button } from '@/shared/ui/button';
 import { Field, FieldGroup, FieldLabel } from '@/shared/ui/field';
 import { Input } from '@/shared/ui/input';
 import { Spinner } from '@/shared/ui/spinner';
-import { ERROR_CODES } from '@shared/constants';
-import { LoginInput } from '@shared/contracts/user.dto';
+
+import { useLoginForm } from '../../model/useLoginForm';
 
 const LoginForm = () => {
-  const router = useRouter();
-  const { mutateAsync, isPending } = useLoginMutation();
-
-  const form = useFormik({
-    initialValues: {
-      emailOrUsername: '',
-      password: '',
-    },
-    validate: zodValidate(LoginInput),
-    onSubmit: async (values) => {
-      form.setStatus(null);
-      try {
-        await mutateAsync(values);
-        router.replace(ROUTES.HOME);
-        router.refresh();
-      } catch (e: unknown) {
-        const error = e as ApiError;
-
-        if (Object.keys(ERROR_CODES).includes(error.code)) {
-          form.setStatus(error.message);
-          return;
-        }
-
-        form.setStatus('Something went wrong');
-      }
-    },
-    validateOnBlur: true,
-    validateOnChange: false,
-  });
+  const { form, isPending } = useLoginForm();
 
   return (
     <AnimatePresence>

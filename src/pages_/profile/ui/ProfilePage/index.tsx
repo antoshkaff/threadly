@@ -3,12 +3,13 @@
 import { Send } from 'lucide-react';
 import React from 'react';
 
-import { useCurrentUser } from '@/entities/user/api/hooks';
-import AddPostForm, { FORM_ID } from '@/features/post/add-post/ui/AddPostForm';
-import { useProfile } from '@/pages_/profile/api/hooks';
+import { useCurrentUser } from '@/entities/user';
+import { AddPostForm, FORM_ID } from '@/features/post/add-post';
 import { Button } from '@/shared/ui/button';
 import { PostInfinityList } from '@/widgets/post';
 import { UserCard } from '@/widgets/user';
+
+import { useProfile } from '../../api/hooks';
 
 type Props = {
   username: string;

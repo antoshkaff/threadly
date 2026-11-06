@@ -10,7 +10,7 @@ type Props = {
   postId: string;
   amount: number;
 };
-const CommentPostButton = ({ amount, postId }: Props) => {
+const CommentPostButton = ({ postId, amount }: Props) => {
   return (
     <Button variant={'ghost'} asChild>
       <Link href={ROUTES.POST_DETAILS(postId)}>

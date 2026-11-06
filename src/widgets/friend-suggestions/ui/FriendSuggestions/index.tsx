@@ -7,7 +7,8 @@ import { UserCardInline } from '@/entities/user';
 import { cn } from '@/shared/lib';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/shared/ui/empty';
 import { Skeleton } from '@/shared/ui/skeleton';
-import { useFriendSuggestions } from '@/widgets/friend-suggestions/api/hooks';
+
+import { useFriendSuggestions } from '../../api/hooks';
 
 export type Props = {
   className?: string;

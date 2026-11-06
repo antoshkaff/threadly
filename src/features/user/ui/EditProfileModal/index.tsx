@@ -1,7 +1,6 @@
 import { UserPen } from 'lucide-react';
 import React from 'react';
 
-import EditProfileForm, { EDIT_PROFILE_FORM_ID } from '@/features/user/ui/EditProfileForm';
 import { Button } from '@/shared/ui/button';
 import {
   Dialog,
@@ -13,6 +12,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/shared/ui/dialog';
+
+import EditProfileForm, { EDIT_PROFILE_FORM_ID } from '../EditProfileForm';
 
 import type { PublicUser } from '@shared/types/user';
 

@@ -1,17 +1,15 @@
 'use client';
 
-import { useFormik } from 'formik';
 import { SendHorizonal } from 'lucide-react';
 import React from 'react';
-import { toast } from 'sonner';
 
-import { UserAvatar } from '@/entities/user';
-import { useCurrentUser } from '@/entities/user/api/hooks';
-import { useAddCommentMutation } from '@/features/comment/api/hooks';
+import { UserAvatar, useCurrentUser } from '@/entities/user';
 import { cn } from '@/shared/lib';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Spinner } from '@/shared/ui/spinner';
+
+import { useAddCommentForm } from '../../model/useAddCommentForm';
 
 type Props = {
   postId: string;
@@ -21,35 +19,7 @@ type Props = {
 const AddCommentForm = ({ postId, className }: Props) => {
   const user = useCurrentUser();
 
-  const { mutateAsync, isPending } = useAddCommentMutation();
-  const form = useFormik({
-    initialValues: {
-      content: '',
-    },
-    validateOnBlur: true,
-    validateOnChange: false,
-    onSubmit: async (data, helpers) => {
-      const content = data.content.trim();
-
-      if (!content.length) {
-        toast.error('Your comment is empty', {
-          description: 'Please write something before sending.',
-        });
-        return;
-      }
-
-      try {
-        await mutateAsync({ postId, content });
-        toast.success('Comment posted', {
-          description: 'Your comment is now visible under the post.',
-        });
-      } catch {
-        toast.error('Something went wrong...');
-      } finally {
-        helpers.resetForm();
-      }
-    },
-  });
+  const { form, isPending } = useAddCommentForm({ postId });
 
   if (!user) return;
   return (

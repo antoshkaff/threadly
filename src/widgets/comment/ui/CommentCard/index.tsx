@@ -2,7 +2,8 @@ import React from 'react';
 
 import { UserCardInline } from '@/entities/user';
 import { formatTime } from '@/shared/lib/utils/formatters';
-import CommentMenu from '@/widgets/comment/ui/CommentMenu';
+
+import CommentMenu from '../CommentMenu';
 
 import type { PublicComment } from '@shared/types/comment';
 import type { PublicUser } from '@shared/types/user';

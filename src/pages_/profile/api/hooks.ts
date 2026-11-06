@@ -1,7 +1,8 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
-import { userKeys } from '@/entities/user/api/keys';
-import { getProfile } from '@/pages_/profile/api/api';
+import { userKeys } from '@/entities/user';
+
+import { getProfile } from './api';
 
 export const useProfile = (username: string) => {
   return useQuery(

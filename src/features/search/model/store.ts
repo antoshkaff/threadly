@@ -1,7 +1,8 @@
 import { create } from 'zustand/react';
 
-import { SEARCH_FILTERS } from '@/features/search/model/constants';
-import type { Filters } from '@/features/search/model/types';
+import type { Filters } from '@/entities/search';
+
+import { SEARCH_FILTERS } from './constants';
 
 type State = {
   q: string;

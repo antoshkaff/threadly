@@ -1,5 +1,5 @@
 import PageTransition from '@/shared/ui/PageTransition';
-import { Sidebar } from '@/widgets/side-bar';
+import { Sidebar } from '@/widgets/site-navigation';
 
 import type { ReactNode } from 'react';
 

@@ -2,12 +2,13 @@
 
 import React from 'react';
 
-import type { CommentsPage } from '@/entities/comment/api/hooks';
-import { useCurrentUser } from '@/entities/user/api/hooks';
+import type { CommentsPage } from '@/entities/comment';
+import { useCurrentUser } from '@/entities/user';
 import { AddCommentForm } from '@/features/comment';
-import { usePostDetails } from '@/pages_/post/api/hooks';
 import { CommentsInfinityList } from '@/widgets/comment';
 import { PostCard } from '@/widgets/post';
+
+import { usePostDetails } from '../../api/hooks';
 
 import type { PublicPost } from '@shared/types/post';
 

@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { UserAvatar } from '@/entities/user';
-import type { Props as UserAvatarProps } from '@/entities/user/ui/UserAvatar';
 import { ROUTES } from '@/shared/config/routes.config';
+
+import UserAvatar from '../UserAvatar';
+
+import type { Props as UserAvatarProps } from '../UserAvatar';
 
 type UserAvatarLinkProps = {
   username: string;

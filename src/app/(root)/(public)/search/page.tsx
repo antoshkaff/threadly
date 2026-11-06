@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import PostSkeleton from '@/entities/post/ui/PostSkeleton';
+import { PostSkeleton } from '@/entities/post';
 import { SearchPage } from '@/pages_/search';
 
 export default function Page() {

@@ -1,16 +1,9 @@
 'use client';
 
-import {
-  infiniteQueryOptions,
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { infiniteQueryOptions, useInfiniteQuery } from '@tanstack/react-query';
 
-import { deleteComment, getCommentsInfinity } from '@/entities/comment/api/api';
-import { commentKeys, commentMutationKeys } from '@/entities/comment/api/keys';
-import { postKeys } from '@/entities/post/api/keys';
-import { searchKeys } from '@/features/search/api/keys';
+import { getCommentsInfinity } from './api';
+import { commentKeys } from './keys';
 
 import type { PublicComment } from '@shared/types/comment';
 
@@ -38,21 +31,4 @@ export const useInfinityComments = ({
       getNextPageParam: (data) => data.nextCursor,
     }),
   );
-};
-
-export const useDeleteCommentMutation = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationKey: commentMutationKeys.delete,
-    mutationFn: deleteComment,
-    onSuccess: async ({ postId }) => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) }),
-        queryClient.invalidateQueries({ queryKey: postKeys.lists }),
-        queryClient.invalidateQueries({ queryKey: postKeys.detail(postId) }),
-        queryClient.invalidateQueries({ queryKey: searchKeys.all }),
-      ]);
-    },
-  });
 };

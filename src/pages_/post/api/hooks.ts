@@ -1,7 +1,8 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
-import { postKeys } from '@/entities/post/api/keys';
-import { getPost } from '@/pages_/post/api/api';
+import { postKeys } from '@/entities/post';
+
+import { getPost } from './api';
 
 import type { PublicPost } from '@shared/types/post';
 

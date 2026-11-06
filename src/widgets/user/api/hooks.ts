@@ -1,7 +1,8 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
-import { userKeys } from '@/entities/user/api/keys';
-import { getSubscribers, getSubscriptions } from '@/widgets/user/api/api';
+import { userKeys } from '@/entities/user';
+
+import { getSubscribers, getSubscriptions } from './api';
 
 export const useSubscribers = (username: string) => {
   return useQuery(

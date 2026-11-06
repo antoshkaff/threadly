@@ -1,11 +1,12 @@
 'use client';
 
-import { SEARCH_FILTERS } from '@/features/search/model/constants';
-import { useSearchStore } from '@/features/search/model/store';
-import type { Filters } from '@/features/search/model/types';
+import type { Filters } from '@/entities/search';
 import { cn } from '@/shared/lib';
 import { Checkbox } from '@/shared/ui/checkbox';
 import { Label } from '@/shared/ui/label';
+
+import { SEARCH_FILTERS } from '../../model/constants';
+import { useSearchStore } from '../../model/store';
 
 type Props = {
   className?: string;

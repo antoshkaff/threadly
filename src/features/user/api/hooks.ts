@@ -1,11 +1,15 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-import { postKeys } from '@/entities/post/api/keys';
-import { userKeys, userMutationKeys } from '@/entities/user/api/keys';
-import { toggleFollow } from '@/features/user/api/api';
+import { commentKeys } from '@/entities/comment';
+import { postKeys } from '@/entities/post';
+import { searchKeys } from '@/entities/search';
+import { userKeys, userMutationKeys } from '@/entities/user';
+
+import { editUser, toggleFollow } from './api';
 
 export const useFollowMutation = (username: string) => {
   const queryClient = useQueryClient();
@@ -33,6 +37,25 @@ export const useFollowMutation = (username: string) => {
       toast.error('Follow update failed', {
         description: err.message || 'Please try again in a moment.',
       });
+    },
+  });
+};
+
+export const useEditUserMutation = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationKey: userMutationKeys.edit,
+    mutationFn: editUser,
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: userKeys.all }),
+        queryClient.invalidateQueries({ queryKey: postKeys.all }),
+        queryClient.invalidateQueries({ queryKey: commentKeys.all }),
+        queryClient.invalidateQueries({ queryKey: searchKeys.all }),
+      ]);
+      router.refresh();
     },
   });
 };

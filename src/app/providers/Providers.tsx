@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider } from 'next-themes';
 import React from 'react';
 
-import { useMe } from '@/entities/user/api/hooks';
+import { useMe } from '@/entities/user';
 
 import type { ReactNode } from 'react';
 

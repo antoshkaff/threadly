@@ -1,46 +1,22 @@
 'use client';
 
 import { MessageCircle } from 'lucide-react';
-import { useEffect, useRef } from 'react';
-import { useIntersection } from 'react-use';
 
-import { useInfinityComments } from '@/entities/comment/api/hooks';
-import type { CommentsPage } from '@/entities/comment/api/hooks';
-import { useCurrentUser } from '@/entities/user/api/hooks';
+import type { CommentsPage } from '@/entities/comment';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/shared/ui/empty';
-import CommentCard from '@/widgets/comment/ui/CommentCard';
 
-import type { RefObject } from 'react';
+import { useCommentsInfinityList } from '../../model/useCommentsInfinityList';
+import CommentCard from '../CommentCard';
 
 type Props = {
   postId: string;
   initialComments: CommentsPage;
 };
 const CommentsInfinityList = ({ postId, initialComments }: Props) => {
-  const { data, fetchNextPage, isLoading, isFetching, hasNextPage } = useInfinityComments({
+  const { comments, intersectionRef, isLoading, user } = useCommentsInfinityList({
     postId,
     initialComments,
   });
-
-  const comments = data?.pages.flatMap((page) => page.items);
-  const intersectionRef = useRef<HTMLDivElement | null>(null);
-  const intersection = useIntersection(intersectionRef as RefObject<HTMLElement>, {
-    root: null,
-    rootMargin: '300px',
-    threshold: 0,
-  });
-
-  useEffect(() => {
-    if (!intersection) return;
-    if (!intersection.isIntersecting) return;
-    if (!hasNextPage) return;
-    if (isLoading) return;
-    if (isFetching) return;
-
-    fetchNextPage({ cancelRefetch: false });
-  }, [intersection, fetchNextPage, hasNextPage, isFetching, isLoading]);
-
-  const user = useCurrentUser();
 
   return !isLoading && !comments?.length ? (
     <Empty>

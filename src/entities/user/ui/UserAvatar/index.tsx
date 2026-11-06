@@ -23,8 +23,8 @@ const userAvatarVariants = cva('block flex shrink-0 overflow-hidden rounded-full
 });
 
 export type Props = {
-  className?: string;
   link: string;
+  className?: string;
 } & VariantProps<typeof userAvatarVariants>;
 
 const UserAvatar = ({ link, size, className }: Props) => {
